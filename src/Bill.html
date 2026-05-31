@@ -1,0 +1,679 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Bill - Darshan Yog Dham</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
+
+    :root {
+      --c-primary: #FF9933;
+      --c-secondary: #1d4ed8;
+      --c-bg-page: #f9f9f9;
+      --c-bg-white: #ffffff;
+      --c-text-main: #1f2937;
+      --c-text-muted: #4b5563;
+      --c-border: #e5e7eb;
+      --c-border-dark: #cbd5e1;
+      --c-accent-light: #fff7ed;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans Devanagari', Arial, sans-serif;
+      background-color: var(--c-bg-page);
+      color: var(--c-text-main);
+      padding: 16px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm 10mm 12mm 10mm;
+    }
+
+    .btn {
+      position: fixed;
+      top: 18px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      z-index: 9999;
+      transition: opacity .2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+      font-family: Arial, sans-serif;
+    }
+
+    .btn:hover {
+      opacity: .9;
+    }
+
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .print-btn {
+      right: 20px;
+      background-color: var(--c-primary);
+    }
+
+    .pdf-btn {
+      right: 118px;
+      background-color: var(--c-secondary);
+    }
+
+    .bill-container {
+      width: 100%;
+      max-width: 880px;
+      margin: 0 auto;
+      background-color: var(--c-bg-white);
+      border: 1px solid var(--c-border-dark);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+    }
+
+    /* HEADER – minimal padding, no extra vertical space */
+    .header {
+      padding: 4px 20px 4px;      /* almost no top/bottom space */
+      border-bottom: 3px solid var(--c-primary);
+      background-color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;                   /* tiny gap between logo and text */
+    }
+
+    .logo-wrapper {
+      width: 200px;               /* desktop size */
+      height: auto;               /* height determined by image */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0;
+      overflow: visible;
+    }
+
+    .main-logo {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .1));
+    }
+
+    .trust-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .department-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--c-primary);
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .sub-text {
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--c-text-muted);
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .contact-row {
+      font-size: 11px;
+      color: var(--c-text-muted);
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .contact-row span {
+      white-space: nowrap;
+    }
+
+    .title {
+      display: inline-block;
+      padding: 4px 14px;
+      border: 1px solid var(--c-secondary);
+      border-radius: 50px;
+      background-color: #eff6ff;
+      color: var(--c-secondary);
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .info-box {
+      padding: 18px 24px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--c-border);
+      background-color: #fff;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .info-col.left {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .info-col.right {
+      flex: 0 0 auto;
+      text-align: right;
+    }
+
+    .field-group {
+      display: inline;
+      line-height: 1.5;
+    }
+
+    .field-label {
+      font-weight: 700;
+      color: #374151;
+      margin-right: 6px;
+    }
+
+    .field-value {
+      color: #4b5563;
+      word-break: break-word;
+    }
+
+    .address-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px dashed var(--c-border-dark);
+      border-left: 4px solid var(--c-primary);
+      border-radius: 6px;
+      background-color: #fafafa;
+    }
+
+    .address-header {
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--c-primary);
+      display: block;
+    }
+
+    .address-text {
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+      padding: 0;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead {
+      background-color: var(--c-accent-light);
+    }
+
+    th,
+    td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--c-border);
+      vertical-align: middle;
+    }
+
+    th {
+      font-weight: 700;
+      border-bottom: 2px solid var(--c-border-dark);
+      background-color: #fef3e8;
+    }
+
+    tr {
+      page-break-inside: avoid;
+    }
+
+    .col-sr {
+      width: 8%;
+      text-align: center;
+    }
+
+    .col-book {
+      width: 47%;
+      text-align: left;
+      word-break: break-word;
+      white-space: normal;
+      padding-right: 12px;
+    }
+
+    .col-qty {
+      width: 12%;
+      text-align: left;
+    }
+
+    .col-price {
+      width: 15%;
+      text-align: left;
+    }
+
+    .col-total {
+      width: 18%;
+      text-align: left;
+    }
+
+    .col-qty,
+    .col-price,
+    .col-total {
+      white-space: nowrap;
+      font-family: monospace, 'Noto Sans Devanagari', sans-serif;
+      font-size: 12.5px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    th.col-qty,
+    th.col-price,
+    th.col-total {
+      text-align: left;
+    }
+
+    .total-section {
+      padding: 16px 20px;
+      border-top: 1px dashed var(--c-border-dark);
+      background-color: #fafafa;
+    }
+
+    .total-box {
+      width: 100%;
+      max-width: 360px;
+      margin-left: auto;
+      background: #fff;
+      padding: 10px 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .03);
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 13px;
+      padding: 4px 0;
+      border-bottom: 1px dashed #f0f0f0;
+    }
+
+    .net-total {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 2px solid var(--c-primary);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--c-primary);
+      background: linear-gradient(135deg, #FFF3E0, #FFF9F0);
+      border-radius: 12px;
+      margin-left: -8px;
+      margin-right: -8px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .net-total span:last-child {
+      font-size: 19px;
+      letter-spacing: .5px;
+    }
+
+    .footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--c-border);
+      background-color: #fff;
+      font-size: 11px;
+    }
+
+    .bank-box {
+      padding: 10px;
+      border: 1px solid var(--c-border);
+      border-left: 5px solid var(--c-secondary);
+      border-radius: 4px;
+      margin-bottom: 16px;
+      background: #fafcff;
+      line-height: 1.5;
+    }
+
+    .bank-box b {
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .signature {
+      text-align: right;
+      padding-top: 20px;
+      font-family: "Cursive", serif;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999999;
+    }
+
+    .toast {
+      min-width: 280px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .2);
+      animation: toastIn .3s ease, toastOut .3s ease 4.7s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toast.success {
+      background-color: var(--c-primary);
+    }
+
+    .toast.error {
+      background-color: #ef4444;
+    }
+
+    .toast.warning {
+      background-color: #f59e0b;
+    }
+
+    .toast.info {
+      background-color: var(--c-secondary);
+    }
+
+    .toast-progress {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, .45);
+      animation: progress 5s linear forwards;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastOut {
+      to   { opacity: 0; transform: translateY(-8px); }
+    }
+
+    @keyframes progress {
+      from { width: 100%; }
+      to   { width: 0%; }
+    }
+
+    /* Mobile – same tighter spacing */
+    @media (max-width:700px) {
+      body {
+        padding: 10px 10px 80px;
+      }
+      .btn {
+        position: static;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .trust-name { font-size: 20px; }
+      .department-name { font-size: 14px; }
+      .logo-wrapper {
+        width: 160px;          /* slightly larger on mobile */
+        height: auto;
+      }
+      .info-row {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .info-col.right { text-align: left; }
+      .bottom-row { flex-direction: column; }
+      .signature {
+        text-align: left;
+        padding-top: 16px;
+      }
+      .table-wrapper { overflow-x: auto; }
+      table { min-width: 620px; }
+      .contact-row {
+        flex-direction: column;
+        gap: 2px;
+        align-items: center;
+      }
+      .contact-row span { white-space: normal; }
+    }
+
+    @media print {
+      html, body { background-color: #fff !important; }
+      body { padding: 0 !important; }
+      .btn, #toastContainer { display: none !important; }
+      .bill-container {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+      }
+      .main-logo {
+        filter: drop-shadow(0 2px 3px rgba(0,0,0,.1)) !important;
+      }
+      th, td, div, p, span { color: #000 !important; }
+      .col-qty, .col-price, .col-total {
+        white-space: nowrap;
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="toastContainer"></div>
+
+  <button class="btn print-btn" onclick="window.print()">
+    🖨️ Print Bill
+  </button>
+
+  <button class="btn pdf-btn" id="pdfBtn" onclick="downloadPDF()">
+    📄 Download PDF
+  </button>
+
+  <div class="bill-container">
+
+    <div class="header">
+      <!-- Only the primary rectangular image – no fallbacks, no extra space -->
+      <div class="logo-wrapper">
+        <img class="main-logo" src="<?!= logo ?>" alt="Logo" />
+      </div>
+      <div class="header-content">
+        <div class="trust-name">दर्शन योग धाम</div>
+        <div class="department-name">पुस्तक वितरण विभाग</div>
+        <div class="sub-text">संस्कृतिवन, केनालरोड, लाखरोड़ा, वाया : लोद्रा, ता : माणसा, जिला : गांधीनगर - 232835 (गुजरात)</div>
+        <div class="contact-row">
+          <span>📚 पुस्तक विभाग : +91 97126 15011</span>
+          <span>🏢 कार्यालय : +91 9409615011, 8200915011</span>
+        </div>
+        <div class="contact-row">
+          <span>✉️ Email : darshanyogdham@gmail.com</span>
+          <span>🌐 Web : https://www.vedicbhandar.org</span>
+        </div>
+        <div class="title">(पुस्तक वितरण / बिल वितरण)</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-row">
+        <div class="info-col left">
+          <span class="field-label">Bill No:</span>
+          <span class="field-value"><?= String(billNo || "") ?></span>
+        </div>
+        <div class="info-col right">
+          <span class="field-label">Date:</span>
+          <span class="field-value"><?= String(date || "") ?></span>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-col left">
+          <span class="field-label">Customer Name:</span>
+          <span class="field-value"><?= String(name || "") ?></span>
+        </div>
+        <div class="info-col right">
+          <span class="field-label">Mobile:</span>
+          <span class="field-value"><?= String(mobile || "") ?></span>
+        </div>
+      </div>
+      <div class="address-box">
+        <span class="address-header">📍 Delivery Address</span>
+        <div class="address-text"><?!= formatAddress(address) ?></div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-sr">Sr.</th>
+            <th class="col-book">📚 Book Name</th>
+            <th class="col-qty">🔢 Qty</th>
+            <th class="col-price">💰 Price</th>
+            <th class="col-total">💵 Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? if (items && items.length) { ?>
+            <? items.forEach(function(item, i){ ?>
+              <tr>
+                <td class="col-sr"><?= i + 1 ?></td>
+                <td class="col-book"><?= String(item.name || "") ?></td>
+                <td class="col-qty"><?= Number(item.qty || 0).toLocaleString("en-IN") ?></td>
+                <td class="col-price">₹ <?= Number(item.price || 0).toLocaleString("en-IN") ?></td>
+                <td class="col-total">₹ <?= Number(item.total || 0).toLocaleString("en-IN") ?></td>
+              </tr>
+            <? }); ?>
+          <? } else { ?>
+            <tr><td colspan="5" style="text-align:center; padding:30px;">No items found</td></tr>
+          <? } ?>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total-section">
+      <div class="total-box">
+        <div class="total-row"><span>📦 Total Amount</span><span>₹ <?= Number(grandTotal || 0).toLocaleString("en-IN") ?></span></div>
+        <div class="total-row"><span>🎁 Discount</span><span>- ₹ <?= Number(discountPrice || 0).toLocaleString("en-IN") ?></span></div>
+        <div class="total-row"><span>🚚 Courier</span><span>₹ <?= Number(courierPrice || 0).toLocaleString("en-IN") ?></span></div>
+        <div class="total-row net-total"><span>💰 Net Payable</span><span>₹ <?= Number(netPrice || 0).toLocaleString("en-IN") ?></span></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="bank-box">
+        <b>🏦 A/c Name:</b> DARSHAN YOG DHAM<br>
+        <b>💰 Saving A/c Number:</b> 01790100055023<br>
+        <b>🏛️ Bank:</b> BANK OF BARODA, DHANSURA<br>
+        <b>🔢 IFSC:</b> BARB0DHANSU (Note: fifth character is Zero)<br>
+        <b>📱 UPI ID:</b> darsh99782@barodampay
+      </div>
+      <div class="bottom-row">
+        <div><b>💳 Payment Modes:</b><br>Cash / UPI / Bank Transfer / Cheque</div>
+        <div class="signature">Authorised Signatory</div>
+      </div>
+      <div style="font-size:9px; text-align:center; margin-top:10px; color:#6c757d;">* धन्यवाद! शांति भव *</div>
+    </div>
+  </div>
+
+  <script>
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = 'toast ' + type;
+      const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+      toast.innerHTML = `<div style="font-size:20px;">${icons[type] || 'ℹ️'}</div><div style="flex:1;">${message}</div><div class="toast-progress"></div>`;
+      document.getElementById('toastContainer').appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+    }
+
+    function downloadPDF() {
+      const btn = document.getElementById("pdfBtn");
+      if (!btn || btn.disabled) return;
+      btn.disabled = true;
+      btn.innerHTML = "⏳ Generating PDF...";
+      showToast("Preparing PDF...", "info");
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(url) {
+            btn.disabled = false;
+            btn.innerHTML = "📄 Download PDF";
+            showToast("PDF generated successfully", "success");
+            if (url) window.open(url, '_blank');
+          })
+          .withFailureHandler(function(err) {
+            btn.disabled = false;
+            btn.innerHTML = "📄 Download PDF";
+            showToast(err?.message || "Failed to generate PDF", "error");
+          })
+          .getBillPdfUrlByActiveRow();
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = "📄 Download PDF";
+        showToast("Use Ctrl+P → Save as PDF", "warning");
+      }
+    }
+  </script>
+</body>
+
+</html>
