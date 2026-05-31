@@ -1,1 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>PaperNest Enterprise | Order System</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========== ENTERPRISE THEME VARIABLES (DARK DEFAULT) ========== */
+    :root {
+      --bg-app: #0B1120;
+      --bg-surface: #111827;
+      --bg-elevated: #1E293B;
+      --bg-input: #0F172A;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.15);
+      --accent-gold: #FBBF24;
+      --accent-gold-soft: rgba(251, 191, 36, 0.2);
+      --accent-blue: #3B82F6;
+      --accent-blue-soft: rgba(59, 130, 246, 0.2);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --text-primary: #F8FAFC;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Inter', sans-serif;
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+    }
 
+    /* LIGHT THEME OVERRIDES */
+    body.light {
+      --bg-app: #F1F5F9;
+      --bg-surface: #FFFFFF;
+      --bg-elevated: #F8FAFC;
+      --bg-input: #FFFFFF;
+      --border-subtle: rgba(0, 0, 0, 0.06);
+      --border-medium: rgba(0, 0, 0, 0.12);
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #64748B;
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-app);
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 20px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #1E293B, #0F172A);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      border: 1px solid var(--accent-gold-soft);
+    }
+    body.light .logo {
+      background: linear-gradient(135deg, #FEF9E3, #FFFBEB);
+    }
+    .brand h1 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFFFFF, var(--accent-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    body.light .brand h1 {
+      background: linear-gradient(135deg, #0F172A, #B45309);
+      -webkit-background-clip: text;
+    }
+    .brand p {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .theme-toggle {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-medium);
+      border-radius: 40px;
+      width: 42px;
+      height: 42px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: 0.2s;
+    }
+    .theme-toggle:hover {
+      background: var(--accent-gold-soft);
+      transform: scale(0.96);
+    }
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 40px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #34D399;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ========== MAIN GRID – EXACTLY 1fr 1fr ========== */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* ========== CARDS ========== */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 28px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .card-badge {
+      background: var(--bg-elevated);
+      padding: 6px 12px;
+      border-radius: 40px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border-medium);
+    }
+    .card-body {
+      padding: 24px;
+    }
+
+    /* FORMS */
+    .field {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: 0.2s;
+      resize: vertical;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px var(--accent-gold-soft);
+    }
+    input::placeholder, textarea::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .search-wrapper {
+      position: relative;
+    }
+    .search-wrapper::after {
+      content: "🔍";
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* BOOK LIST – both scrollbars */
+    .booklist-container {
+      border: 1px solid var(--border-medium);
+      border-radius: 16px;
+      background: var(--bg-input);
+      overflow: auto;
+      max-height: 280px;
+    }
+    .booklist {
+      display: flex;
+      flex-direction: column;
+      min-width: max-content;
+    }
+    .book-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .book-item:last-child {
+      border-bottom: none;
+    }
+    .book-item:hover {
+      background: var(--accent-gold-soft);
+    }
+    .book-item.selected {
+      background: var(--accent-gold-soft);
+      border-left: 3px solid var(--accent-gold);
+    }
+    .book-name {
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
+      white-space: nowrap;
+    }
+    .book-code {
+      font-size: 11px;
+      font-family: monospace;
+      background: rgba(0,0,0,0.2);
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: var(--accent-gold);
+      flex-shrink: 0;
+    }
+
+    /* PRICE & STOCK */
+    .price-panel {
+      background: var(--accent-gold-soft);
+      border: 1px solid var(--accent-gold-soft);
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin: 18px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .price-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .price-value {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+    .stock-card {
+      flex: 1;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      border-top: 3px solid var(--success);
+    }
+    .stock-card.warning {
+      border-top-color: var(--warning);
+    }
+    .stock-card.critical {
+      border-top-color: var(--danger);
+    }
+    .stock-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .stock-number {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--success);
+    }
+    .stock-card.warning .stock-number {
+      color: var(--warning);
+    }
+    .stock-card.critical .stock-number {
+      color: var(--danger);
+    }
+
+    /* BUTTONS */
+    .btn {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 16px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(115deg, #D97706, #FBBF24);
+      color: #0A0C0F;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+      box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+    }
+    .btn-save {
+      background: var(--accent-blue);
+      color: white;
+    }
+    .btn-save:hover {
+      background: #2563EB;
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #FCA5A5;
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+    .flex-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .action-group {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    /* ORDER TABLE */
+    .table-wrapper {
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: auto;
+      margin-bottom: 24px;
+      background: var(--bg-elevated);
+      max-height: 320px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      padding: 14px 18px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(0,0,0,0.1);
+    }
+    td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13px;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .text-gold {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+    .remove-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      transition: 0.15s;
+    }
+    .remove-item:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #F87171;
+    }
+
+    /* SUMMARY */
+    .summary {
+      background: rgba(0,0,0,0.25);
+      border-radius: 18px;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+    }
+    body.light .summary {
+      background: #F8FAFC;
+    }
+    .total-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+    }
+    .total-amount {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+
+    /* TOAST */
+    .toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .toast {
+      background: var(--bg-surface);
+      border-left: 4px solid var(--accent-gold);
+      padding: 12px 20px;
+      border-radius: 14px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      animation: slideIn 0.2s ease;
+      backdrop-filter: blur(4px);
+    }
+    .toast.success { border-left-color: #10B981; }
+    .toast.error { border-left-color: #EF4444; }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* NAME SUGGESTION DROPDOWN */
+    .name-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: 12px;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 10;
+      box-shadow: var(--shadow-lg);
+      margin-top: 4px;
+      display: none; /* hidden by default */
+    }
+    .name-suggestion-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13px;
+    }
+    .name-suggestion-item:last-child { border-bottom: none; }
+    .name-suggestion-item:hover {
+      background: var(--accent-gold-soft);
+    }
+    .name-suggestion-item small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="app">
+  <header class="header">
+    <div class="brand">
+      <div class="logo">📦</div>
+      <div>
+        <h1>PaperNest Enterprise</h1>
+        <p>Intelligent Order Management</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">🌙</button>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Live Inventory
+      </div>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <!-- LEFT: Inventory & Customer Panel -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">📚 Inventory Console</div>
+          <div class="card-sub">Search, select and add items</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <!-- Customer Details Section -->
+        <!-- NAME FIELD WITH LOOKUP -->
+        <div class="field">
+          <label>Buyer Name <span style="color:var(--accent-gold);">*</span></label>
+          <div style="position: relative;">
+            <input type="text" id="buyerName" placeholder="Enter customer name" autocomplete="off"
+                   oninput="lookupName()">
+            <div id="nameSuggestions" class="name-suggestions"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Customer Mobile (for lookup)</label>
+          <div class="flex-row" style="margin-top: 8px;">
+            <input type="text" id="lookupMobile" placeholder="10-digit mobile" style="flex:3;"
+                   onkeyup="if(this.value.length===10) fetchCustomerAddress()"
+                   onblur="autoFillWhatsapp()">
+            <button type="button" class="btn" style="flex:1; height:44px; background: var(--accent-gold-soft); color: var(--text-primary);"
+                    onclick="fetchCustomerAddress()">🔍 Fetch</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Address</label>
+          <textarea id="address" rows="3" placeholder="Full address (auto‑filled if available)"></textarea>
+        </div>
+        <div class="field">
+          <label>WhatsApp Number <span style="color:var(--text-muted); font-weight:400;">(editable)</span></label>
+          <input type="text" id="whatsapp" placeholder="Auto‑filled from mobile, can change">
+        </div>
+        <div class="field">
+          <label>Courier Charges (₹)</label>
+          <input type="number" id="courier" min="0" value="0" step="0.01">
+        </div>
+
+        <!-- Inventory Search & Selection -->
+        <div class="field">
+          <label>Search Titles</label>
+          <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Book name or code..." oninput="filterBooks()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Available Stock</label>
+          <div class="booklist-container">
+            <div class="booklist" id="bookList"></div>
+          </div>
+        </div>
+        <div class="price-panel">
+          <span class="price-label">Unit Price</span>
+          <span class="price-value" id="selectedPrice">—</span>
+        </div>
+        <div class="flex-row">
+          <div class="field" style="flex:1">
+            <label>Quantity</label>
+            <input type="number" id="quantity" min="1" placeholder="0">
+          </div>
+          <div class="stock-card" id="stockCard">
+            <div class="stock-label">Current Stock</div>
+            <div class="stock-number" id="stockQty">0</div>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addToOrder()">➕ Add to Order</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Order Basket -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">🛒 Order Basket</div>
+          <div class="card-sub">Review & finalize</div>
+        </div>
+        <div class="card-badge" id="itemCount">0 items</div>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Title / Code</th><th class="text-right">Qty</th><th class="text-right">Unit</th><th class="text-right">Total</th><th></th></tr>
+            </thead>
+            <tbody id="orderTableBody">
+              <tr><td colspan="5" style="text-align:center; padding:48px;">✨ No items selected</td></tr>
+            </tbody>
+           </table>
+        </div>
+        <div class="summary">
+          <span class="total-label">GRAND TOTAL</span>
+          <span class="total-amount" id="grandTotal">₹0</span>
+        </div>
+        <div class="action-group">
+          <button class="btn btn-save" id="saveOrderBtn" onclick="commitOrder()">💾 Commit Order</button>
+          <button class="btn btn-danger" onclick="clearBasket()">🗑️ Clear All</button>
+        </div>
+        <p style="font-size: 10px; color: var(--text-muted); margin-top: 16px; text-align: right;">Clearing restores reserved stock</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ========== THEME ==========
+  const themeToggle = document.getElementById('themeToggle');
+  function setTheme(mode) {
+    if (mode === 'light') {
+      document.body.classList.add('light');
+      localStorage.setItem('papernest_theme', 'light');
+      themeToggle.innerHTML = '☀️';
+    } else {
+      document.body.classList.remove('light');
+      localStorage.setItem('papernest_theme', 'dark');
+      themeToggle.innerHTML = '🌙';
+    }
+  }
+  function toggleTheme() {
+    const isLight = document.body.classList.contains('light');
+    setTheme(isLight ? 'dark' : 'light');
+  }
+  const saved = localStorage.getItem('papernest_theme');
+  setTheme(saved === 'light' ? 'light' : 'dark');
+  themeToggle.addEventListener('click', toggleTheme);
+
+  // ========== APP STATE ==========
+  let inventory = [];
+  let liveStock = {};
+  let order = [];
+  let selectedBookNo = null;
+  let isSaving = false;
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s||'').replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+
+  function showToast(msg, type = 'info') {
+    const container = $('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span>${esc(msg)}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2800);
+  }
+
+  // ========== LOAD DATA ==========
+  function loadInventory(forceRefresh = false) {
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(data => {
+          inventory = Array.isArray(data) ? data : [];
+          liveStock = {};
+          inventory.forEach(b => { liveStock[b.no] = Number(b.qty) || 0; });
+          if (!forceRefresh) order = [];
+          else recalcStockFromOrder();
+          renderBookList();
+          renderOrderTable();
+          if (inventory.length) selectedBookNo = inventory[0].no;
+          updateSelectedPreview();
+          if (!forceRefresh) showToast(`✅ ${inventory.length} titles loaded`, 'success');
+        })
+        .withFailureHandler(err => showToast(err.message || 'Load failed', 'error'))
+        .getBooks();
+    } else {
+      // Demo data
+      inventory = [
+        { no: "PN-101", name: "Midnight Library: A Novel about Infinite Lives and Parallel Universes", price: 1299, qty: 12 },
+        { no: "PN-204", name: "The Design of Future Things: Human-Centered Innovation for the Next Decade", price: 1799, qty: 5 },
+        { no: "PN-309", name: "Paper Architecture: Structural Minimalism in Modern Digital Design Systems", price: 2499, qty: 3 },
+        { no: "PN-412", name: "Minimalist Systems Thinking for Enterprises and Large Organizations", price: 899, qty: 8 }
+      ];
+      liveStock = {};
+      inventory.forEach(b => { liveStock[b.no] = b.qty; });
+      order = [];
+      renderBookList();
+      renderOrderTable();
+      if (inventory.length) selectedBookNo = inventory[0].no;
+      updateSelectedPreview();
+      showToast(`📦 Demo: ${inventory.length} products ready`, 'success');
+    }
+  }
+
+  function recalcStockFromOrder() {
+    let fresh = {};
+    inventory.forEach(b => { fresh[b.no] = Number(b.qty) || 0; });
+    order.forEach(it => { if (fresh[it.bookNo] !== undefined) fresh[it.bookNo] -= it.qty; });
+    liveStock = fresh;
+  }
+
+  // ========== RENDER BOOK LIST ==========
+  function renderBookList() {
+    const container = $('bookList');
+    const keyword = ($('searchInput').value || '').toLowerCase().trim();
+    let filtered = inventory.filter(b => b.name.toLowerCase().includes(keyword) || b.no.toLowerCase().includes(keyword));
+    container.innerHTML = '';
+    if (!filtered.length) {
+      container.innerHTML = '<div style="padding: 32px; text-align:center; color: var(--text-muted);">📭 No matching titles</div>';
+      selectedBookNo = null;
+      updateSelectedPreview();
+      return;
+    }
+    filtered.forEach(book => {
+      const div = document.createElement('div');
+      div.className = 'book-item' + (selectedBookNo === book.no ? ' selected' : '');
+      div.innerHTML = `<span class="book-name" title="${esc(book.name)}">${esc(book.name)}</span><span class="book-code">${esc(book.no)}</span>`;
+      div.onclick = () => selectBook(book.no);
+      container.appendChild(div);
+    });
+    if (filtered.length && (!selectedBookNo || !filtered.some(b => b.no === selectedBookNo))) {
+      selectBook(filtered[0].no);
+    } else if (selectedBookNo) {
+      updateSelectedPreview();
+    }
+  }
+
+  function selectBook(bookNo) {
+    selectedBookNo = bookNo;
+    renderBookList();
+    updateSelectedPreview();
+  }
+
+  function updateSelectedPreview() {
+    if (!selectedBookNo || !inventory.length) {
+      $('stockQty').innerText = '0';
+      $('selectedPrice').innerText = '—';
+      return;
+    }
+    const book = inventory.find(b => b.no === selectedBookNo);
+    if (!book) return;
+    const stock = liveStock[book.no] || 0;
+    $('stockQty').innerText = stock;
+    $('selectedPrice').innerText = `₹${book.price}`;
+    const card = $('stockCard');
+    card.classList.remove('warning', 'critical');
+    if (stock === 0) card.classList.add('critical');
+    else if (stock <= 5) card.classList.add('warning');
+  }
+
+  function filterBooks() { renderBookList(); }
+
+  // ========== ORDER OPERATIONS ==========
+  function addToOrder() {
+    if (!selectedBookNo) return showToast('Select a product first', 'error');
+    const qty = parseInt($('quantity').value, 10);
+    if (isNaN(qty) || qty <= 0) return showToast('Enter valid quantity', 'error');
+    const book = inventory.find(b => b.no === selectedBookNo);
+    if (!book) return showToast('Product not found', 'error');
+    const available = liveStock[selectedBookNo] || 0;
+    if (qty > available) return showToast(`Insufficient stock. Only ${available} left`, 'error');
+
+    const existing = order.find(i => i.bookNo === selectedBookNo);
+    if (existing) existing.qty += qty;
+    else order.push({ bookNo: book.no, name: book.name, price: book.price, qty });
+
+    liveStock[selectedBookNo] -= qty;
+    $('quantity').value = '';
+    renderOrderTable();
+    renderBookList();
+    updateSelectedPreview();
+    showToast(`✓ ${qty} × ${book.name.substring(0, 40)} added`, 'success');
+  }
+
+  function clearBasket() {
+    if (!order.length) { showToast('No items to clear', 'info'); return; }
+    order.forEach(item => {
+      if (liveStock[item.bookNo] !== undefined) liveStock[item.bookNo] += item.qty;
+    });
+    order = [];
+    renderOrderTable();
+    renderBookList();
+    updateSelectedPreview();
+    showToast('Basket cleared, stock restored', 'success');
+  }
+
+  function removeOrderItem(index) {
+    const item = order[index];
+    if (!item) return;
+    if (liveStock[item.bookNo] !== undefined) liveStock[item.bookNo] += item.qty;
+    order.splice(index, 1);
+    renderOrderTable();
+    renderBookList();
+    updateSelectedPreview();
+    showToast(`Removed "${item.name}"`, 'info');
+  }
+
+  function renderOrderTable() {
+    const tbody = $('orderTableBody');
+    tbody.innerHTML = '';
+    if (!order.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:48px;">✨ No items selected</td></tr>';
+      $('grandTotal').innerHTML = '₹0';
+      $('itemCount').innerHTML = '0 items';
+      return;
+    }
+    let grand = 0;
+    let totalQty = 0;
+    order.forEach((item, idx) => {
+      const line = item.price * item.qty;
+      grand += line;
+      totalQty += item.qty;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><strong>${esc(item.name)}</strong><br><small style="color:var(--text-muted);">${esc(item.bookNo)}</small></td>
+        <td class="text-right">${item.qty}</td>
+        <td class="text-right">₹${item.price}</td>
+        <td class="text-right text-gold">₹${line}</td>
+        <td class="text-right"><button class="remove-item" onclick="removeOrderItem(${idx})">✕</button></td>
+      `;
+      tbody.appendChild(row);
+    });
+    $('grandTotal').innerHTML = `₹${grand}`;
+    $('itemCount').innerHTML = `${totalQty} ${totalQty === 1 ? 'item' : 'items'}`;
+  }
+
+  // ========== CUSTOMER ADDRESS LOOKUP & WHATSAPP AUTO‑FILL ==========
+  function autoFillWhatsapp() {
+    const mobile = $('lookupMobile').value.trim();
+    const currentWhatsapp = $('whatsapp').value.trim();
+    if (mobile.length === 10 && /^[6-9]\d{9}$/.test(mobile)) {
+      if (currentWhatsapp === '' || currentWhatsapp === mobile) {
+        $('whatsapp').value = mobile;
+      }
+    }
+  }
+
+  function fetchCustomerAddress() {
+    const mobile = $('lookupMobile').value.trim();
+    if (!mobile) {
+      showToast('Please enter a mobile number', 'warning');
+      return;
+    }
+
+    autoFillWhatsapp();
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(result) {
+          if (result.found) {
+            $('address').value = result.address || '';
+            if (!$('buyerName').value.trim()) {
+              $('buyerName').value = result.name || '';
+            }
+            showToast('✅ Address fetched', 'success');
+          } else {
+            showToast('❌ No customer found with this mobile', 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          showToast('Error fetching address: ' + (err.message || err), 'error');
+        })
+        .lookupCustomerByMobile(mobile);
+    } else {
+      showToast('🔍 Demo: Address lookup disabled in preview', 'info');
+    }
+  }
+
+  // ========== NAME LOOKUP (NEW) ==========
+  let nameLookupTimer = null;
+
+  function lookupName() {
+    clearTimeout(nameLookupTimer);
+    nameLookupTimer = setTimeout(doNameLookup, 300);
+  }
+
+  function doNameLookup() {
+    const query = ($('buyerName').value || '').trim();
+    const container = $('nameSuggestions');
+
+    if (!query || query.length < 2) {
+      container.style.display = 'none';
+      container.innerHTML = '';
+      return;
+    }
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(results => {
+          renderNameSuggestions(results);
+        })
+        .withFailureHandler(err => {
+          console.error('Name lookup failed:', err);
+          container.style.display = 'none';
+        })
+        .lookupCustomerByName(query);
+    } else {
+      // Demo – no suggestions
+      container.style.display = 'none';
+    }
+  }
+
+  function renderNameSuggestions(matches) {
+    const container = $('nameSuggestions');
+    container.innerHTML = '';
+
+    if (!matches || !matches.length) {
+      container.style.display = 'none';
+      return;
+    }
+
+    matches.forEach(cust => {
+      const div = document.createElement('div');
+      div.className = 'name-suggestion-item';
+      div.innerHTML = `
+        <strong>${esc(cust.name)}</strong>
+        <small>${esc(cust.mobile)} – ${esc(cust.address.substring(0, 60))}${cust.address.length > 60 ? '…' : ''}</small>
+      `;
+      div.onclick = () => selectNameSuggestion(cust);
+      container.appendChild(div);
+    });
+
+    container.style.display = 'block';
+  }
+
+  function selectNameSuggestion(cust) {
+    $('buyerName').value = cust.name;
+    $('lookupMobile').value = cust.mobile;
+    $('address').value = cust.address;
+    autoFillWhatsapp(); // will auto-fill WhatsApp from mobile if not manually changed
+    $('nameSuggestions').style.display = 'none';
+    $('nameSuggestions').innerHTML = '';
+  }
+
+  // ========== COMMIT ORDER (FIXED) ==========
+  function commitOrder() {
+    if (isSaving) return;
+    const buyer = ($('buyerName').value || '').trim();
+    if (!buyer) return showToast('Buyer name is required', 'warning');
+    if (!order.length) return showToast('Order is empty', 'warning');
+
+    const mobile = ($('lookupMobile').value || '').trim();
+    const whatsapp = $('whatsapp').value.trim();
+    const address = $('address').value.trim();
+    const courier = parseFloat($('courier').value) || 0;
+
+    isSaving = true;
+    const btn = $('saveOrderBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Saving...';
+    btn.disabled = true;
+
+    const payload = {
+      buyer: buyer,
+      mobile: mobile,
+      whatsapp: whatsapp,
+      address: address,
+      courier: courier,
+      items: order.map(it => ({ bookNo: it.bookNo, qty: it.qty }))
+    };
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(response) {
+          if (response && response.success) {
+            showToast(`✅ Order #${response.orderNo} committed`, 'success');
+            setTimeout(() => google.script.host.close(), 1500);
+          } else {
+            showToast(`❌ ${response.message || 'Order failed'}`, 'error');
+            isSaving = false;
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        })
+        .withFailureHandler(function(err) {
+          showToast(`❌ ${err.message || 'Commit failed'}`, 'error');
+          isSaving = false;
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        })
+        .saveOrder(payload);
+    } else {
+      // Demo fallback
+      setTimeout(() => {
+        showToast('📦 Demo order saved (mock integration)', 'success');
+        isSaving = false;
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        setTimeout(() => google.script.host.close(), 1000);
+      }, 800);
+    }
+  }
+
+  // ========== INIT ==========
+  loadInventory();
+  window.filterBooks = filterBooks;
+  window.addToOrder = addToOrder;
+  window.clearBasket = clearBasket;
+  window.removeOrderItem = removeOrderItem;
+  window.commitOrder = commitOrder;
+  window.fetchCustomerAddress = fetchCustomerAddress;
+</script>
+</body>
+</html>
