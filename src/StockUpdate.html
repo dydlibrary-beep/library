@@ -1,1 +1,363 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      padding:20px;
+    }
+
+    .container{
+      background:white;
+      max-width:500px;
+      margin:auto;
+      min-height:650px;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    .input-group{
+      margin-bottom:15px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:bold;
+      color:#555;
+      font-size:14px;
+    }
+
+    input,select{
+      width:100%;
+      padding:12px;
+      border:2px solid #ddd;
+      border-radius:10px;
+      font-size:14px;
+      transition:.3s;
+    }
+
+    input:focus,
+    select:focus{
+      outline:none;
+      border-color:#667eea;
+      box-shadow:0 0 8px rgba(102,126,234,.3);
+    }
+
+    button{
+      width:100%;
+      padding:15px;
+      background:linear-gradient(135deg,#28a745,#20c997);
+      color:white;
+      border:none;
+      border-radius:12px;
+      font-size:17px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    button:hover{
+      transform:scale(1.02);
+      box-shadow:0 8px 20px rgba(0,0,0,.2);
+    }
+
+    .book-list{
+  border:1px solid #ddd;
+  border-radius:10px;
+  height:220px;          /* fixed height */
+  overflow-y:auto;
+  margin-top:10px;
+  background:white;
+}
+
+    .book-item{
+      padding:12px;
+      border-bottom:1px solid #eee;
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .book-item:hover{
+      background:#f1f3ff;
+    }
+
+    .selected{
+      background:#dbe4ff !important;
+    }
+
+    .stock-box{
+      background:#f8f9fa;
+      padding:15px;
+      border-radius:12px;
+      margin-bottom:15px;
+      text-align:center;
+    }
+
+    .stock{
+      font-size:28px;
+      font-weight:bold;
+      color:#0b8043;
+      margin-top:5px;
+    }
+    button:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+  transform:none;
+   }
+
+.spinner{
+  width:18px;
+  height:18px;
+  border:3px solid rgba(255,255,255,.4);
+  border-top:3px solid white;
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .8s linear infinite;
+  vertical-align:middle;
+}
+
+@keyframes spin{
+  from{
+    transform:rotate(0deg);
+  }
+  to{
+    transform:rotate(360deg);
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>📦 Update Stock</h2>
+
+  <div class="input-group">
+    <label>Search Book</label>
+
+    <input
+      type="text"
+      id="search"
+      placeholder="Search by Book Name or Book No"
+      onkeyup="filterBooks()"
+    >
+  </div>
+
+  <div class="book-list" id="bookList"></div>
+
+  <div class="stock-box">
+
+    <div>Current Stock</div>
+
+    <div class="stock" id="currentStock">
+      0
+    </div>
+
+  </div>
+
+  <div class="input-group">
+
+    <label>Stock Action</label>
+
+    <select id="type">
+      <option value="add">➕ Add Stock</option>
+      <option value="remove">➖ Remove Stock</option>
+    </select>
+
+  </div>
+
+  <div class="input-group">
+
+    <label>Quantity</label>
+
+    <input
+      type="number"
+      id="qty"
+      min="1"
+      placeholder="Enter Quantity"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+    >
+
+  </div>
+
+  <button id="saveBtn" onclick="saveStock()">
+  <span id="btnText">💾 Update Stock</span>
+</button>
+
+</div>
+
+<script>
+
+let books = [];
+let selectedBook = null;
+
+google.script.run
+  .withSuccessHandler(function(data){
+
+    books = data;
+
+    renderBooks(data);
+
+  })
+  .getBooks();
+
+function renderBooks(data){
+
+  let html = "";
+
+  data.forEach(function(book){
+
+    html += `
+      <div
+        class="book-item"
+        onclick="selectBook('${book.no}')"
+        id="book-${book.no}"
+      >
+        <b>${book.no}</b><br>
+        ${book.name}
+      </div>
+    `;
+  });
+
+  document
+    .getElementById("bookList")
+    .innerHTML = html;
+}
+
+function filterBooks(){
+
+  let q =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
+
+  let filtered =
+    books.filter(function(book){
+
+      return (
+        book.name.toLowerCase().includes(q) ||
+        book.no.toLowerCase().includes(q)
+      );
+    });
+
+  renderBooks(filtered);
+}
+
+function selectBook(bookNo){
+
+  selectedBook =
+    books.find(b => b.no === bookNo);
+
+  document
+    .querySelectorAll(".book-item")
+    .forEach(function(el){
+      el.classList.remove("selected");
+    });
+
+  let el =
+    document.getElementById(
+      "book-" + bookNo
+    );
+
+  if(el){
+    el.classList.add("selected");
+  }
+
+  document
+    .getElementById("currentStock")
+    .innerText =
+      selectedBook.qty;
+}
+
+function saveStock(){
+
+  if(!selectedBook){
+    alert("Select a Book");
+    return;
+  }
+
+  let qty =
+    document.getElementById("qty").value;
+
+  if(!qty || qty <= 0){
+    alert("Enter valid quantity");
+    return;
+  }
+
+  let btn =
+    document.getElementById("saveBtn");
+
+  let btnText =
+    document.getElementById("btnText");
+
+  // disable button
+  btn.disabled = true;
+
+  // spinner
+  btnText.innerHTML =
+    '<span class="spinner"></span> Updating...';
+
+  let data = {
+
+    bookNo: selectedBook.no,
+
+    type:
+      document.getElementById("type").value,
+
+    qty: qty
+  };
+
+  google.script.run
+
+    .withSuccessHandler(function(res){
+
+      alert(
+        "Stock Updated Successfully\n\n" +
+        "Book: " + res.book + "\n" +
+        "Old Qty: " + res.oldQty + "\n" +
+        "New Qty: " + res.newQty
+      );
+
+      google.script.host.close();
+    })
+
+    .withFailureHandler(function(err){
+
+      // restore button
+      btn.disabled = false;
+
+      btnText.innerHTML =
+        "💾 Update Stock";
+
+      alert(err.message);
+
+    })
+
+    .updateBookStock(data);
+}
+
+</script>
+
+</body>
+</html>
