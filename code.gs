@@ -3585,3 +3585,26 @@ function createSheetHeaders() {
   stockSheet.setFrozenRows(1);
   stockSheet.autoResizeColumns(1, stockHeaders.length);
 }
+/**
+ * Ensures all four core sheets exist.
+ * Creates any missing sheet without adding headers.
+ * Call your existing header/formatter functions after this.
+ */
+function ensureAllSheetsExist() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const requiredSheetNames = [
+    "All Book List",
+    "Order Book List",
+    "Customer Database",
+    "StockData"
+  ];
+
+  requiredSheetNames.forEach(function(name) {
+    if (!ss.getSheetByName(name)) {
+      ss.insertSheet(name);
+      Logger.log("Created missing sheet: " + name);
+    }
+  });
+  SpreadsheetApp.flush();
+  showToast("All required sheets exist", "success");
+}
