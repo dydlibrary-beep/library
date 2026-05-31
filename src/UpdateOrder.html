@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* ================================================================
+           BASE & RESET
+           ================================================================ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --transition-speed: 0.45s;
+            --font-main: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            padding: 18px;
+            min-height: 100vh;
+            transition: background var(--transition-speed) ease,
+                color var(--transition-speed) ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ================================================================
+           DESIGN 1 – "Ocean Breeze"
+           ============================================================ */
+        .design-ocean body,
+        body.design-ocean {
+            --bg-body: #eaf4fb;
+            --bg-body-alt: #dceef8;
+            --bg-card: #ffffff;
+            --border-card: #d5e8f5;
+            --shadow-card: 0 6px 28px rgba(11, 90, 140, 0.07);
+            --shadow-lg: 0 14px 44px rgba(11, 90, 140, 0.10);
+            --radius-card: 20px;
+            --radius-sm: 13px;
+
+            --banner-start: #083d54;
+            --banner-mid: #156d8e;
+            --banner-end: #1fa0bb;
+            --text-banner: #ffffff;
+
+            --accent: #0f7b9e;
+            --accent-glow: rgba(15, 123, 158, 0.25);
+            --accent-light: #e3f2f8;
+            --text-primary: #0a2836;
+            --text-secondary: #3b5868;
+            --text-muted: #6e8b9b;
+
+            --table-head-bg: #083d54;
+            --table-head-text: #ffffff;
+            --table-border: #e2eef5;
+            --table-row-hover: #f3f9fd;
+
+            --btn-start: #0f7b9e;
+            --btn-end: #0a5e78;
+            --btn-shadow: rgba(15, 123, 158, 0.35);
+
+            --input-border: #c8dce9;
+            --input-focus: #0f7b9e;
+            --input-shadow: rgba(15, 123, 158, 0.13);
+
+            --toast-success: #0f7b9e;
+            --toast-error: #c0392b;
+            --toast-warning: #e67e22;
+            --toast-info: #2c7fa0;
+
+            --picker-bg: rgba(255, 255, 255, 0.65);
+            --picker-border: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ================================================================
+           DESIGN 2 – "Sunset Glow"
+           ============================================================ */
+        .design-sunset body,
+        body.design-sunset {
+            --bg-body: #fef7f1;
+            --bg-body-alt: #fdf0e4;
+            --bg-card: #ffffff;
+            --border-card: #f3e2d4;
+            --shadow-card: 0 6px 28px rgba(160, 75, 35, 0.07);
+            --shadow-lg: 0 14px 44px rgba(160, 75, 35, 0.10);
+            --radius-card: 20px;
+            --radius-sm: 13px;
+
+            --banner-start: #6b2f1e;
+            --banner-mid: #b85a3a;
+            --banner-end: #da8c5c;
+            --text-banner: #ffffff;
+
+            --accent: #b85a3a;
+            --accent-glow: rgba(184, 90, 58, 0.25);
+            --accent-light: #fdf0e8;
+            --text-primary: #3a1f14;
+            --text-secondary: #694537;
+            --text-muted: #8e6d5f;
+
+            --table-head-bg: #6b2f1e;
+            --table-head-text: #ffffff;
+            --table-border: #f3e2d4;
+            --table-row-hover: #fef5ee;
+
+            --btn-start: #b85a3a;
+            --btn-end: #8d4228;
+            --btn-shadow: rgba(184, 90, 58, 0.35);
+
+            --input-border: #e8d4c6;
+            --input-focus: #b85a3a;
+            --input-shadow: rgba(184, 90, 58, 0.13);
+
+            --toast-success: #b85a3a;
+            --toast-error: #c0392b;
+            --toast-warning: #e67e22;
+            --toast-info: #b8734f;
+
+            --picker-bg: rgba(255, 255, 255, 0.65);
+            --picker-border: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ================================================================
+           DESIGN 3 – "Midnight Elegance"
+           ============================================================ */
+        .design-midnight body,
+        body.design-midnight {
+            --bg-body: #0b111e;
+            --bg-body-alt: #111827;
+            --bg-card: #1a2332;
+            --border-card: #2d3d53;
+            --shadow-card: 0 6px 28px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 14px 44px rgba(0, 0, 0, 0.55);
+            --radius-card: 20px;
+            --radius-sm: 13px;
+
+            --banner-start: #1a2332;
+            --banner-mid: #2a3d55;
+            --banner-end: #c89b4a;
+            --text-banner: #f2e8d5;
+
+            --accent: #c89b4a;
+            --accent-glow: rgba(200, 155, 74, 0.30);
+            --accent-light: #2a3d55;
+            --text-primary: #f2e8d5;
+            --text-secondary: #c4b598;
+            --text-muted: #8a7b65;
+
+            --table-head-bg: #0f1623;
+            --table-head-text: #c89b4a;
+            --table-border: #2d3d53;
+            --table-row-hover: #212d3d;
+
+            --btn-start: #c89b4a;
+            --btn-end: #9a7535;
+            --btn-shadow: rgba(200, 155, 74, 0.35);
+
+            --input-border: #3a4d63;
+            --input-focus: #c89b4a;
+            --input-shadow: rgba(200, 155, 74, 0.15);
+
+            --toast-success: #c89b4a;
+            --toast-error: #c0392b;
+            --toast-warning: #e67e22;
+            --toast-info: #c89b4a;
+
+            --picker-bg: rgba(26, 35, 50, 0.80);
+            --picker-border: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ================================================================
+           GLOBAL APPLICATION OF CSS VARIABLES
+           ============================================================ */
+        body {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            transition: background var(--transition-speed) ease,
+                color var(--transition-speed) ease;
+        }
+
+        /* ================================================================
+           DESIGN PICKER – SINGLE BUTTON
+           ============================================================ */
+        .design-picker-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 9999;
+        }
+
+        .design-picker {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--picker-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: 1px solid var(--picker-border);
+            box-shadow: 0 6px 26px rgba(0, 0, 0, 0.07);
+            transition: all var(--transition-speed) ease;
+            cursor: default;
+            user-select: none;
+        }
+
+        .picker-label {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-secondary);
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .cycle-design-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid transparent;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.30s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            background: var(--accent-light);
+            color: var(--accent);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            font-family: var(--font-main);
+            letter-spacing: 0.3px;
+        }
+
+        .cycle-design-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent-glow);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            border-radius: 40px;
+        }
+
+        .cycle-design-btn:hover::after {
+            opacity: 1;
+        }
+
+        .cycle-design-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 28px var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        .cycle-design-btn:active {
+            transform: translateY(-1px) scale(0.97);
+            transition: all 0.10s ease;
+        }
+
+        .cycle-design-btn .btn-icon {
+            font-size: 20px;
+            line-height: 1;
+            transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cycle-design-btn:hover .btn-icon {
+            transform: rotate(-15deg) scale(1.2);
+        }
+
+        .cycle-design-btn .btn-text {
+            position: relative;
+            z-index: 1;
+            transition: all 0.30s ease;
+        }
+
+        /* ripple effect on click */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple-anim 0.55s ease-out forwards;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* ================================================================
+           TOP BANNER
+           ============================================================ */
+        .topBanner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px 24px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--banner-start), var(--banner-mid) 55%, var(--banner-end));
+            color: var(--text-banner);
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-speed) ease;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .bannerLeft {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logoBox {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.11);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all var(--transition-speed) ease;
+            flex-shrink: 0;
+        }
+
+        .topBanner h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            line-height: 1.15;
+        }
+
+        .topBanner p {
+            margin: 4px 0 0;
+            opacity: 0.88;
+            font-size: 12.5px;
+            letter-spacing: 0.3px;
+        }
+
+        .statusBadge {
+            background: rgba(255, 255, 255, 0.13);
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 700;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            transition: all var(--transition-speed) ease;
+            color: var(--text-banner);
+            white-space: nowrap;
+        }
+
+        /* ================================================================
+           BOX / CARD
+           ============================================================ */
+        .box {
+            background: var(--bg-card);
+            padding: 20px 22px;
+            border-radius: var(--radius-card);
+            margin-bottom: 16px;
+            border: 1px solid var(--border-card);
+            box-shadow: var(--shadow-card);
+            transition: all var(--transition-speed) ease;
+        }
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 18px;
+            color: var(--text-primary);
+            transition: color var(--transition-speed) ease;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        /* ================================================================
+           INFO GRID
+           ============================================================ */
+        .orderInfoGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .infoCard {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 17px;
+            padding: 16px 18px;
+            box-shadow: var(--shadow-card);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .infoLabel {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 7px;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .infoValue {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-primary);
+            word-break: break-word;
+            transition: color var(--transition-speed) ease;
+        }
+
+        /* ================================================================
+           FORM
+           ============================================================ */
+        label {
+            font-size: 12.5px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            transition: color var(--transition-speed) ease;
+            letter-spacing: 0.3px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 14px;
+            font-size: 14px;
+            transition: all 0.25s ease;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px var(--input-shadow);
+            transform: translateY(-1px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* ================================================================
+           TABLE
+           ============================================================ */
+        .tableWrapper {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid var(--border-card);
+            border-radius: 15px;
+            margin-top: 10px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .tableWrapper::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        .tableWrapper::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 100%;
+            background: var(--bg-card);
+            transition: background var(--transition-speed) ease;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid var(--table-border);
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 13px;
+            transition: all var(--transition-speed) ease;
+            color: var(--text-primary);
+        }
+
+        th {
+            background: var(--table-head-bg);
+            color: var(--table-head-text);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        tr:hover td {
+            background: var(--table-row-hover);
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        /* ================================================================
+           SUMMARY
+           ============================================================ */
+        .summaryCard {
+            background: var(--accent-light);
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-card);
+            margin-top: 14px;
+            transition: all var(--transition-speed) ease;
+            text-align: right;
+        }
+
+        .summaryCard h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            color: var(--text-primary);
+            transition: color var(--transition-speed) ease;
+        }
+
+        .netAmount {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--accent);
+            transition: color var(--transition-speed) ease;
+            letter-spacing: -0.3px;
+        }
+
+        /* ================================================================
+           SAVE BUTTON
+           ============================================================ */
+        button.save-btn {
+            background: linear-gradient(135deg, var(--btn-start), var(--btn-end));
+            color: #ffffff;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 15px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 800;
+            margin-top: 8px;
+            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1.15);
+            box-shadow: 0 8px 22px var(--btn-shadow);
+            letter-spacing: 0.3px;
+            font-family: var(--font-main);
+        }
+
+        button.save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px var(--btn-shadow);
+        }
+
+        button.save-btn:active {
+            transform: translateY(-1px) scale(0.97);
+        }
+
+        button.save-btn:disabled {
+            opacity: 0.72;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 14px var(--btn-shadow);
+        }
+
+        button.save-btn.saved {
+            background: linear-gradient(135deg, #16a34a, #15803d) !important;
+            box-shadow: 0 8px 22px rgba(22, 163, 74, 0.35) !important;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ================================================================
+           TOAST
+           ============================================================ */
+        #toastContainer {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 420px;
+        }
+
+        .toast {
+            position: relative;
+            min-width: 290px;
+            max-width: 400px;
+            padding: 15px 18px;
+            border-radius: 16px;
+            color: #ffffff;
+            overflow: hidden;
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.20);
+            animation: toastIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.15),
+                toastOut 0.35s ease 4.6s forwards;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .toast-icon {
+            font-size: 22px;
+            line-height: 1;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            letter-spacing: 0.3px;
+        }
+
+        .toast-message {
+            font-size: 12.5px;
+            line-height: 1.45;
+            opacity: 0.93;
+            word-break: break-word;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 17px;
+            cursor: pointer;
+            opacity: 0.75;
+            padding: 0;
+            margin: 0;
+            width: 26px;
+            height: 26px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.1);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, var(--toast-success), rgba(21, 128, 61, 0.88));
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, var(--toast-error), rgba(185, 28, 28, 0.88));
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, var(--toast-warning), rgba(217, 119, 6, 0.88));
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, var(--toast-info), rgba(29, 78, 216, 0.88));
+        }
+
+        .toast-progress {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3.5px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.35);
+            animation: progress 4.7s linear forwards;
+            border-radius: 0 0 0 16px;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px) scale(0.90);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateX(50px) scale(0.90);
+            }
+        }
+
+        @keyframes progress {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0%;
+            }
+        }
+
+        /* ================================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 700px) {
+            body {
+                padding: 10px;
+            }
+
+            .topBanner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+                padding: 16px 18px;
+            }
+
+            .topBanner h1 {
+                font-size: 21px;
+            }
+
+            .logoBox {
+                width: 52px;
+                height: 52px;
+                font-size: 26px;
+            }
+
+            #toastContainer {
+                right: 10px;
+                left: 10px;
+                top: 10px;
+            }
+
+            .toast {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .tableWrapper {
+                max-height: 240px;
+            }
+
+            .design-picker {
+                border-radius: 34px;
+                padding: 8px 16px;
+                gap: 8px;
+            }
+
+            .cycle-design-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+                gap: 7px;
+            }
+
+            .cycle-design-btn .btn-icon {
+                font-size: 17px;
+            }
+
+            .picker-label {
+                font-size: 11px;
+            }
+
+            .orderInfoGrid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .orderInfoGrid {
+                grid-template-columns: 1fr;
+            }
+
+            .design-picker {
+                flex-direction: column;
+                border-radius: 24px;
+                gap: 6px;
+                padding: 10px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body class="design-ocean">
+
+    <!-- ===== SINGLE DESIGN CYCLER BUTTON ===== -->
+    <div class="design-picker-wrapper">
+        <div class="design-picker">
+            <span class="picker-label">🎨 Theme</span>
+            <button class="cycle-design-btn" id="cycleDesignBtn" onclick="cycleDesign(event)" title="Click to cycle through themes">
+                <span class="btn-icon">🌊</span>
+                <span class="btn-text">Ocean Breeze</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toastContainer"></div>
+
+    <!-- TOP HEADER -->
+    <div class="topBanner">
+        <div class="bannerLeft">
+            <div class="logoBox">📚</div>
+            <div>
+                <h1>Update Order Details</h1>
+                <p>Selected order row auto-loaded from sheet</p>
+            </div>
+        </div>
+        <div class="statusBadge" id="loadStatus">Loading…</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="content" style="display:none;">
+
+        <!-- ORDER INFO -->
+        <div class="orderInfoGrid">
+            <div class="infoCard">
+                <div class="infoLabel">Order No</div>
+                <div class="infoValue" id="orderNo">--</div>
+            </div>
+            <div class="infoCard">
+                <div class="infoLabel">Buyer</div>
+                <div class="infoValue" id="buyerName">--</div>
+            </div>
+            <div class="infoCard">
+                <div class="infoLabel">Status</div>
+                <div class="infoValue" id="statusText">--</div>
+            </div>
+        </div>
+
+        <!-- BOOKS TABLE -->
+        <div class="box">
+            <h3>📚 Ordered Books</h3>
+            <div class="tableWrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th class="right">Qty</th>
+                            <th class="right">Price</th>
+                            <th class="right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookTable"></tbody>
+                </table>
+            </div>
+            <div class="summaryCard">
+                <h3>Total : ₹<span id="grandTotal">0</span></h3>
+                <div class="netAmount">Net Total : ₹<span id="netTotalText">0</span></div>
+            </div>
+        </div>
+
+        <!-- PAYMENT FIELDS -->
+        <div class="box">
+            <label>Discount %</label>
+            <input type="number" id="discountPercent" placeholder="0" step="any">
+            <label>Discount ₹</label>
+            <input type="number" id="discountAmount" placeholder="0" step="any">
+            <label>Courier ₹</label>
+            <input type="number" id="courier" placeholder="0" step="any">
+        </div>
+
+        <!-- CONTACT FIELDS -->
+        <div class="box">
+            <label>Address</label>
+            <textarea id="address" rows="4" placeholder="Enter shipping address…"></textarea>
+            <label>Mobile Number</label>
+            <input type="text" id="mobile" placeholder="10-digit mobile number">
+            <label>WhatsApp Number</label>
+            <input type="text" id="whatsapp" placeholder="10-digit WhatsApp number">
+        </div>
+
+        <!-- SAVE BUTTON -->
+        <button class="save-btn" id="saveBtn" onclick="saveOrderUpdate()">
+            💾 Save Changes
+        </button>
+    </div>
+
+    <script>
+        // ================================================================
+        //  DESIGN CYCLER – SINGLE BUTTON
+        // ================================================================
+        const designCycle = ['ocean', 'sunset', 'midnight'];
+        const designMeta = {
+            ocean: { icon: '🌊', label: 'Ocean Breeze' },
+            sunset: { icon: '🌅', label: 'Sunset Glow' },
+            midnight: { icon: '🌙', label: 'Midnight Elegance' },
+        };
+
+        let currentDesignIndex = 0; // ocean is default
+
+        function cycleDesign(event) {
+            // Remove ripple if any
+            const btn = document.getElementById('cycleDesignBtn');
+            const existingRipple = btn.querySelector('.ripple');
+            if (existingRipple) existingRipple.remove();
+
+            // Add ripple effect
+            if (event && event.clientX && event.clientY) {
+                const rect = btn.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const size = Math.max(rect.width, rect.height) * 1.6;
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+                btn.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
+            }
+
+            // Advance index
+            currentDesignIndex = (currentDesignIndex + 1) % designCycle.length;
+            const newDesign = designCycle[currentDesignIndex];
+            const meta = designMeta[newDesign];
+
+            // Remove all design classes
+            document.body.classList.remove('design-ocean', 'design-sunset', 'design-midnight');
+            // Add new class
+            document.body.classList.add('design-' + newDesign);
+
+            // Update button
+            const iconEl = btn.querySelector('.btn-icon');
+            const textEl = btn.querySelector('.btn-text');
+            iconEl.textContent = meta.icon;
+            textEl.textContent = meta.label;
+
+            // Brief pulse animation on icon
+            iconEl.style.transform = 'scale(1.5) rotate(20deg)';
+            setTimeout(() => {
+                iconEl.style.transform = 'scale(1) rotate(0deg)';
+            }, 180);
+
+            // Subtle toast
+            showToast(`Switched to <strong>${meta.label}</strong>`, 'info');
+        }
+
+        // ================================================================
+        //  TOAST SYSTEM
+        // ================================================================
+        function showToast(message, type) {
+            type = type || 'info';
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            const titles = {
+                success: 'Success',
+                error: 'Error',
+                warning: 'Warning',
+                info: 'Heads Up'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.innerHTML =
+                '<div class="toast-icon">' + icons[type] + '</div>' +
+                '<div class="toast-content">' +
+                '<div class="toast-title">' + titles[type] + '</div>' +
+                '<div class="toast-message">' + message + '</div>' +
+                '</div>' +
+                '<button class="toast-close" aria-label="Close">✕</button>' +
+                '<div class="toast-progress"></div>';
+
+            const container = document.getElementById('toastContainer');
+            container.appendChild(toast);
+
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.onclick = function() { toast.remove(); };
+
+            // Auto-remove after animation
+            setTimeout(() => {
+                if (toast.parentNode) toast.remove();
+            }, 5100);
+        }
+
+        // ================================================================
+        //  CALCULATIONS
+        // ================================================================
+        let total = 0;
+
+        document.getElementById('discountPercent').addEventListener('input', function() {
+            const percent = parseFloat(this.value) || 0;
+            const amount = (total * percent) / 100;
+            document.getElementById('discountAmount').value = amount.toFixed(2);
+            calculateNet();
+        });
+
+        document.getElementById('discountAmount').addEventListener('input', function() {
+            const amount = parseFloat(this.value) || 0;
+            const percent = total > 0 ? (amount / total) * 100 : 0;
+            document.getElementById('discountPercent').value = percent.toFixed(2);
+            calculateNet();
+        });
+
+        document.getElementById('courier').addEventListener('input', calculateNet);
+
+        function calculateNet() {
+            const discount = parseFloat(document.getElementById('discountAmount').value) || 0;
+            const courier = parseFloat(document.getElementById('courier').value) || 0;
+            const net = total - discount + courier;
+            document.getElementById('netTotalText').innerText = net.toFixed(2);
+        }
+
+        // ================================================================
+        //  MOBILE / WHATSAPP – DIGITS ONLY, MAX 10
+        // ================================================================
+        ['mobile', 'whatsapp'].forEach(function(id) {
+            document.getElementById(id).addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            });
+        });
+
+        // ================================================================
+        //  LOAD ORDER FROM GOOGLE APPS SCRIPT
+        // ================================================================
+        function loadOrder() {
+            document.getElementById('loadStatus').innerText = 'Loading…';
+
+            google.script.run
+                .withSuccessHandler(function(data) {
+                    if (!data) {
+                        showToast('No order selected', 'error');
+                        document.getElementById('loadStatus').innerText = 'No Data';
+                        return;
+                    }
+
+                    // Reveal content
+                    document.getElementById('content').style.display = 'block';
+
+                    // Store row reference
+                    window.selectedRow = data.row;
+
+                    // Populate header
+                    document.getElementById('orderNo').innerText = data.orderNo || '--';
+                    document.getElementById('buyerName').innerText = data.buyer || '--';
+                    document.getElementById('statusText').innerText = data.status || '--';
+                    document.getElementById('loadStatus').innerText = '✅ Order Loaded';
+
+                    // Totals
+                    total = Number(data.total || 0);
+                    document.getElementById('grandTotal').innerText = total.toFixed(2);
+
+                    document.getElementById('discountPercent').value = Number(data.discountPercent || 0);
+                    document.getElementById('discountAmount').value = Number(data.discountAmount || 0);
+                    document.getElementById('courier').value = Number(data.courier || 0);
+                    document.getElementById('netTotalText').innerText = Number(data.netTotal || 0).toFixed(2);
+
+                    // Contact
+                    document.getElementById('address').value = data.address || '';
+                    document.getElementById('mobile').value = data.mobile || '';
+                    document.getElementById('whatsapp').value = data.whatsapp || '';
+
+                    // Books table
+                    let html = '';
+                    if (data.books && data.books.length) {
+                        data.books.forEach(function(item) {
+                            html +=
+                                '<tr>' +
+                                '<td>' + escapeHTML(item.name) + '</td>' +
+                                '<td class="right">' + item.qty + '</td>' +
+                                '<td class="right">₹' + Number(item.price).toFixed(2) + '</td>' +
+                                '<td class="right">₹' + Number(item.amount).toFixed(2) + '</td>' +
+                                '</tr>';
+                        });
+                    } else {
+                        html = '<tr><td colspan="4" style="text-align:center;padding:20px;">📭 No books found</td></tr>';
+                    }
+                    document.getElementById('bookTable').innerHTML = html;
+
+                    calculateNet();
+                    showToast('Selected order loaded successfully', 'success');
+                })
+                .withFailureHandler(function(err) {
+                    document.getElementById('loadStatus').innerText = '❌ Load Failed';
+                    showToast(err.message || 'Failed to load order', 'error');
+                })
+                .getSelectedOrderUpdateData();
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        // ================================================================
+        //  SAVE ORDER TO GOOGLE APPS SCRIPT
+        // ================================================================
+        function saveOrderUpdate() {
+            const btn = document.getElementById('saveBtn');
+            if (btn.dataset.loading === '1') return;
+
+            btn.dataset.loading = '1';
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving Changes…';
+            btn.classList.remove('saved');
+
+            const data = {
+                row: window.selectedRow,
+                discountPercent: document.getElementById('discountPercent').value,
+                discountAmount: document.getElementById('discountAmount').value,
+                courier: document.getElementById('courier').value,
+                netTotal: document.getElementById('netTotalText').innerText,
+                address: document.getElementById('address').value,
+                mobile: document.getElementById('mobile').value,
+                whatsapp: document.getElementById('whatsapp').value
+            };
+
+            google.script.run
+                .withSuccessHandler(function(msg) {
+                    btn.innerHTML = '✅ Saved Successfully';
+                    btn.classList.add('saved');
+                    showToast(msg || 'Changes saved!', 'success');
+                    document.getElementById('loadStatus').innerText = '💾 Saved';
+                    btn.dataset.loading = '0';
+                    // Auto-close after short delay
+                    setTimeout(function() {
+                        google.script.host.close();
+                    }, 1300);
+                })
+                .withFailureHandler(function(err) {
+                    btn.disabled = false;
+                    btn.dataset.loading = '0';
+                    btn.innerHTML = '💾 Save Changes';
+                    btn.classList.remove('saved');
+                    showToast(err.message || 'Save failed', 'error');
+                })
+                .updateOrderDetails(data);
+        }
+
+        // ================================================================
+        //  INIT
+        // ================================================================
+        window.onload = function() {
+            // Set initial design state
+            document.body.classList.add('design-ocean');
+            currentDesignIndex = 0;
+            loadOrder();
+        };
+    </script>
+</body>
+</html>
