@@ -1,1 +1,1071 @@
 
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <base target="_top">
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    :root{
+
+      --primary:#2563eb;
+      --primary2:#1d4ed8;
+
+      --success:#16a34a;
+      --danger:#dc2626;
+      --warning:#f59e0b;
+
+      --text:#111827;
+      --muted:#6b7280;
+
+      --bg1:#eef4ff;
+      --bg2:#f8fbff;
+
+      --card:#ffffff;
+
+      --border:#dbe7ff;
+    }
+
+    body{
+
+      font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--bg1),
+          var(--bg2)
+        );
+
+      min-height:100vh;
+
+      padding:22px;
+
+      color:var(--text);
+    }
+
+    .wrapper{
+
+      max-width:900px;
+
+      margin:auto;
+
+      background:white;
+
+      border-radius:28px;
+
+      overflow:hidden;
+
+      border:1px solid #e5edff;
+
+      box-shadow:
+        0 20px 50px rgba(0,0,0,.08);
+    }
+
+    .top{
+
+      position:relative;
+
+      padding:28px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1e40af,
+          #2563eb,
+          #4f46e5
+        );
+
+      color:white;
+
+      overflow:hidden;
+    }
+
+    .top::before{
+
+      content:"";
+
+      position:absolute;
+
+      width:240px;
+      height:240px;
+
+      background:
+        rgba(255,255,255,.08);
+
+      border-radius:50%;
+
+      top:-80px;
+      right:-60px;
+    }
+
+    .top::after{
+
+      content:"";
+
+      position:absolute;
+
+      width:180px;
+      height:180px;
+
+      background:
+        rgba(255,255,255,.06);
+
+      border-radius:50%;
+
+      bottom:-70px;
+      left:-50px;
+    }
+
+    .header{
+
+      position:relative;
+
+      z-index:2;
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      gap:20px;
+
+      flex-wrap:wrap;
+    }
+
+    .titleBox{
+
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+
+    .logo{
+
+      width:72px;
+      height:72px;
+
+      border-radius:22px;
+
+      background:
+        rgba(255,255,255,.16);
+
+      backdrop-filter:blur(6px);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      font-size:34px;
+    }
+
+    .title{
+
+      font-size:30px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+
+    .subtitle{
+
+      margin-top:6px;
+
+      font-size:14px;
+
+      opacity:.92;
+    }
+
+    .badge{
+
+      padding:12px 18px;
+
+      border-radius:999px;
+
+      background:
+        rgba(255,255,255,.15);
+
+      backdrop-filter:blur(10px);
+
+      font-size:13px;
+
+      font-weight:700;
+    }
+
+    .content{
+      padding:26px;
+    }
+
+    #items{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .item{
+
+      background:var(--card);
+
+      border-radius:24px;
+
+      border:1px solid #e5edff;
+
+      padding:22px;
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      gap:20px;
+
+      position:relative;
+
+      overflow:hidden;
+
+      box-shadow:
+        0 10px 26px rgba(0,0,0,.05);
+
+      transition:.25s;
+    }
+
+    .item:hover{
+
+      transform:translateY(-3px);
+
+      box-shadow:
+        0 18px 34px rgba(0,0,0,.08);
+    }
+
+    .item::before{
+
+      content:"";
+
+      position:absolute;
+
+      top:0;
+      left:0;
+      bottom:0;
+
+      width:6px;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--primary),
+          #4f46e5
+        );
+    }
+
+    .bookBlock{
+      flex:1;
+      padding-left:10px;
+    }
+
+    .bookTitle{
+
+      font-size:18px;
+
+      font-weight:800;
+
+      line-height:1.5;
+    }
+
+    .lang{
+
+      margin-top:6px;
+
+      color:var(--muted);
+
+      font-size:14px;
+    }
+
+    .qtyTag{
+
+      margin-top:14px;
+
+      display:inline-flex;
+
+      align-items:center;
+
+      gap:8px;
+
+      background:#eff6ff;
+
+      color:#1d4ed8;
+
+      padding:10px 14px;
+
+      border-radius:999px;
+
+      font-size:13px;
+
+      font-weight:700;
+    }
+
+    .actions{
+
+      display:flex;
+
+      gap:10px;
+    }
+
+    button{
+
+      border:none;
+
+      cursor:pointer;
+
+      transition:.2s;
+
+      font-weight:700;
+    }
+
+    .qtybtn{
+
+      width:44px;
+      height:44px;
+
+      border-radius:14px;
+
+      font-size:20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eff6ff,
+          #dbeafe
+        );
+
+      color:#1d4ed8;
+    }
+
+    .remove{
+
+      width:44px;
+      height:44px;
+
+      border-radius:14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ef4444,
+          #dc2626
+        );
+
+      color:white;
+
+      font-size:16px;
+    }
+
+    #addSection{
+
+      margin-top:28px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f8fbff,
+          #f1f5ff
+        );
+
+      border:1px solid #dbe7ff;
+
+      border-radius:24px;
+
+      padding:24px;
+    }
+
+    .sectionTitle{
+
+      display:flex;
+      align-items:center;
+      gap:12px;
+
+      font-size:20px;
+
+      font-weight:800;
+
+      margin-bottom:20px;
+
+      color:#1e3a8a;
+    }
+
+    .addRow{
+
+      display:flex;
+
+      gap:12px;
+
+      align-items:center;
+    }
+
+    #bookSearch{
+
+      flex:1;
+
+      border:1px solid #dbe7ff;
+
+      border-radius:16px;
+
+      padding:14px 16px;
+
+      font-size:14px;
+
+      background:white;
+    }
+
+    #newBook{
+
+      width:100%;
+
+      margin-top:14px;
+
+      border:1px solid #dbe7ff;
+
+      border-radius:18px;
+
+      padding:10px;
+
+      background:white;
+
+      font-size:14px;
+    }
+
+    .primaryBtn{
+
+      min-width:110px;
+
+      padding:14px 20px;
+
+      border-radius:16px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary2)
+        );
+
+      color:white;
+    }
+
+    #saveBtn{
+
+      width:100%;
+
+      margin-top:28px;
+
+      padding:18px;
+
+      border-radius:20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #16a34a,
+          #15803d
+        );
+
+      color:white;
+
+      font-size:17px;
+    }
+
+    .toast{
+
+      position:fixed;
+
+      top:24px;
+      right:24px;
+
+      min-width:260px;
+
+      padding:15px 18px;
+
+      border-radius:16px;
+
+      color:white;
+
+      font-size:14px;
+
+      font-weight:700;
+
+      z-index:99999;
+
+      opacity:0;
+
+      transform:
+        translateY(-10px);
+
+      transition:.25s;
+    }
+
+    .toast.show{
+
+      opacity:1;
+
+      transform:
+        translateY(0);
+    }
+
+    .toast.success{
+      background:#16a34a;
+    }
+
+    .toast.error{
+      background:#dc2626;
+    }
+
+    .toast.warning{
+      background:#f59e0b;
+      color:#111827;
+    }
+
+    .toast.info{
+      background:#2563eb;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="wrapper">
+
+  <div class="top">
+
+    <div class="header">
+
+      <div class="titleBox">
+
+        <div class="logo">
+          📚
+        </div>
+
+        <div>
+
+          <div class="title">
+            Manage Order
+          </div>
+
+          <div class="subtitle">
+            Smart Order Management System
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="badge">
+        ⚡ Live Stock Tracking
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="content">
+
+    <div id="items">
+      ⏳ Loading order...
+    </div>
+
+    <div
+      id="addSection"
+      style="display:none;"
+    >
+
+      <div class="sectionTitle">
+        ➕ Add More Books
+      </div>
+
+      <div class="addRow">
+
+        <input
+          type="text"
+          id="bookSearch"
+          placeholder="Search books..."
+          oninput="filterBooks()"
+        >
+
+        <button
+          class="primaryBtn"
+          onclick="addBook()"
+        >
+          ➕ Add
+        </button>
+
+      </div>
+
+      <select
+        id="newBook"
+        size="8"
+      ></select>
+
+    </div>
+
+    <button
+      id="saveBtn"
+      onclick="saveAll()"
+    >
+      💾 Save Order Changes
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+let items = [];
+let allBooks = [];
+let liveStock = {};
+let bookInfo = {};
+let originalItems = [];
+let row = null;
+
+function showToast(message,type){
+
+  let toast =
+    document.getElementById("toast");
+
+  toast.className =
+    "toast " + (type || "info");
+
+  toast.innerHTML = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(function(){
+
+      toast.classList.remove("show");
+
+    },3000);
+}
+
+// LOAD BOOK MASTER
+
+google.script.run
+
+  .withSuccessHandler(function(data){
+
+    allBooks = data || [];
+
+    liveStock = {};
+    bookInfo = {};
+
+    allBooks.forEach(function(b){
+
+      liveStock[b.no] =
+        Number(b.qty) || 0;
+
+      bookInfo[b.no] = {
+
+        no:b.no,
+        name:b.name,
+        language:b.language
+      };
+    });
+
+    loadOrder();
+
+  })
+
+  .getBooks();
+
+function loadOrder(){
+
+  google.script.run
+
+    .withSuccessHandler(function(data){
+
+      if(!data){
+
+        showToast(
+          "Order not found",
+          "error"
+        );
+
+        return;
+      }
+
+      row = data.row;
+
+      originalItems =
+        JSON.parse(
+          JSON.stringify(data.items)
+        );
+
+      items = data.items.map(function(i){
+
+        let info =
+          bookInfo[i.bookNo] || {};
+
+        liveStock[i.bookNo] =
+
+         (Number(liveStock[i.bookNo]) || 0)
+        
+        return {
+
+          book: info.name,
+          qty: Number(i.qty),
+          bookNo: i.bookNo,
+          info: info
+        };
+      });
+
+      render();
+
+      filterBooks();
+
+      document
+        .getElementById("addSection")
+        .style.display = "block";
+
+      showToast(
+        "Order loaded successfully",
+        "success"
+      );
+
+    })
+
+    .withFailureHandler(function(err){
+
+      showToast(
+        err.message,
+        "error"
+      );
+
+    })
+
+    .getSelectedOrderBooks();
+}
+
+function render(){
+
+  let html = "";
+
+  items.forEach(function(x,i){
+
+    let stock =
+      Number(liveStock[x.bookNo]) || 0;
+
+    html += `
+
+      <div class="item">
+
+        <div class="bookBlock">
+
+          <div class="bookTitle">
+
+            📘
+            ${x.info.no}
+            -
+            ${x.book}
+
+          </div>
+
+          <div class="lang">
+
+            🌐 ${x.info.language}
+
+          </div>
+
+          <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-top:14px;
+          ">
+
+            <div class="qtyTag">
+
+              📦 Quantity:
+              ${x.qty}
+
+            </div>
+
+            <div class="qtyTag">
+
+              🏪 Total Stock:
+              ${stock}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="actions">
+
+          <button
+            class="qtybtn"
+            onclick="minus(${i})"
+          >
+            −
+          </button>
+
+          <button
+            class="qtybtn"
+            onclick="plus(${i})"
+          >
+            +
+          </button>
+
+          <button
+            class="remove"
+            onclick="removeBook(${i})"
+          >
+            ✖
+          </button>
+
+        </div>
+
+      </div>
+    `;
+  });
+
+  document
+    .getElementById("items")
+    .innerHTML = html;
+}
+
+function plus(i){
+
+  let bookNo =
+    items[i].bookNo;
+
+  let stock =
+    Number(liveStock[bookNo]) || 0;
+
+  if(stock <= 0){
+
+    showToast(
+      "No stock available",
+      "warning"
+    );
+
+    return;
+  }
+
+  items[i].qty++;
+
+  liveStock[bookNo]--;
+
+  render();
+
+  filterBooks();
+}
+
+function minus(i){
+
+  let bookNo =
+    items[i].bookNo;
+
+  items[i].qty--;
+
+  liveStock[bookNo]++;
+
+  if(items[i].qty <= 0){
+
+    items.splice(i,1);
+  }
+
+  render();
+
+  filterBooks();
+}
+
+function removeBook(i){
+
+  let bookNo =
+    items[i].bookNo;
+
+  liveStock[bookNo] +=
+    Number(items[i].qty);
+
+  items.splice(i,1);
+
+  render();
+
+  filterBooks();
+}
+
+function filterBooks(){
+
+  let keyword =
+
+    document
+      .getElementById("bookSearch")
+      .value
+      .toLowerCase();
+
+  let select =
+    document.getElementById("newBook");
+
+  let html = "";
+
+  allBooks.forEach(function(b){
+
+    let text =
+
+      (
+        b.no + " " +
+        b.name + " " +
+        b.language
+      ).toLowerCase();
+
+    if(text.includes(keyword)){
+
+      html += `
+
+        <option value="${b.no}">
+
+          ${b.no}
+          -
+          ${b.name}
+          (${b.language})
+
+        </option>
+      `;
+    }
+  });
+
+  select.innerHTML = html;
+}
+
+function addBook(){
+
+  let bookNo =
+
+    document
+      .getElementById("newBook")
+      .value;
+
+  if(!bookNo) return;
+
+  let stock =
+    Number(liveStock[bookNo]) || 0;
+
+  if(stock <= 0){
+
+    showToast(
+      "No stock available",
+      "warning"
+    );
+
+    return;
+  }
+
+  let info =
+    bookInfo[bookNo];
+
+  let found =
+
+    items.find(
+      x => x.bookNo == bookNo
+    );
+
+  if(found){
+
+    found.qty++;
+
+  } else {
+
+    items.push({
+
+      book: info.name,
+      qty: 1,
+      bookNo: bookNo,
+      info: info
+    });
+  }
+
+  liveStock[bookNo]--;
+
+  render();
+
+  filterBooks();
+}
+
+function saveAll(){
+
+  let btn =
+    document.getElementById("saveBtn");
+
+  if(btn.disabled) return;
+
+  btn.disabled = true;
+
+  btn.innerHTML = "⏳ Saving Changes...";
+
+  google.script.run
+
+    .withSuccessHandler(function(){
+
+      btn.innerHTML = "✅ Saved Successfully";
+
+      showToast(
+        "Order updated successfully",
+        "success"
+      );
+
+      setTimeout(function(){
+
+        google.script.host.close();
+
+      },1000);
+
+    })
+
+    .withFailureHandler(function(err){
+
+      btn.disabled = false;
+
+      btn.innerHTML =
+        "💾 Save Order Changes";
+
+      showToast(
+        err.message,
+        "error"
+      );
+
+    })
+
+    .saveManagedOrder(
+      row,
+      originalItems,
+      items
+    );
+}
+
+</script>
+
+</body>
+</html>
+
