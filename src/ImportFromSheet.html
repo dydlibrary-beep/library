@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body { font-family: 'Inter', sans-serif; padding: 24px; background: #fff; color: #333; }
+    h3 { margin-top: 0; }
+    button {
+      padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px;
+      background: #3B82F6; color: white; cursor: pointer; font-weight: 600;
+    }
+    button:disabled { background: #94A3B8; cursor: not-allowed; }
+    .table-wrapper {
+      max-height: 300px; overflow: auto; border: 1px solid #e2e8f0;
+      border-radius: 12px; margin: 16px 0;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f8fafc; font-weight: 600; }
+    .status { margin: 10px 0; font-weight: 500; }
+    .error { color: #EF4444; }
+    .success { color: #10B981; }
+    .progress-bar { width: 100%; height: 12px; background: #e2e8f0; border-radius: 8px; overflow: hidden; margin: 8px 0; }
+    .progress-fill { height: 100%; background: #3B82F6; width: 0%; transition: width 0.2s; }
+    .preview-note { font-size: 12px; color: #64748B; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h3>📤 Import Books from StockData</h3>
+  <p>Make sure the sheet <strong>StockData</strong> exists with columns: Book No, Book Name, Language, Publication, Author, Stock, Price, Status.</p>
+  <button onclick="previewSheet()">🔍 Preview Data</button>
+
+  <div id="previewSection" style="display:none;">
+    <hr>
+    <div class="preview-note" id="rowCount"></div>
+    <div class="table-wrapper">
+      <table>
+        <thead id="previewHead"></thead>
+        <tbody id="previewBody"></tbody>
+      </table>
+    </div>
+    <button id="importBtn" onclick="startImport()">📥 Start Import</button>
+    <div id="progressSection" style="display:none; margin-top:16px;">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="status" id="progressText"></div>
+    </div>
+    <div id="errorList" class="status error"></div>
+  </div>
+
+  <script>
+    var totalRows = 0;
+    var batchSize = 10;
+
+    function previewSheet() {
+      google.script.run.withSuccessHandler(function(data) {
+        document.getElementById('previewSection').style.display = 'block';
+        document.getElementById('rowCount').innerText =
+          'Total rows to import: ' + data.total + ' (showing first ' + Math.min(data.previewRows.length, 20) + ')';
+
+        // Headers
+        var headHtml = '<tr>' + data.headers.map(h => '<th>' + h + '</th>').join('') + '</tr>';
+        document.getElementById('previewHead').innerHTML = headHtml;
+
+        // Preview rows
+        var bodyHtml = '';
+        data.previewRows.forEach(function(row) {
+          bodyHtml += '<tr>' + row.map(c => '<td>' + (c == null ? '' : String(c).replace(/</g, '&lt;')) + '</td>').join('') + '</tr>';
+        });
+        document.getElementById('previewBody').innerHTML = bodyHtml;
+
+        totalRows = data.total;
+
+        // Reset progress
+        document.getElementById('progressSection').style.display = 'none';
+        document.getElementById('errorList').innerHTML = '';
+        document.getElementById('importBtn').disabled = false;
+      }).getImportPreview();
+    }
+
+    function startImport() {
+      document.getElementById('importBtn').disabled = true;
+      document.getElementById('progressSection').style.display = 'block';
+      document.getElementById('errorList').innerHTML = '';
+      processBatch(0);
+    }
+
+    function processBatch(offset) {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          var pct = Math.round((res.processed / res.total) * 100);
+          document.getElementById('progressFill').style.width = pct + '%';
+          document.getElementById('progressText').innerText =
+            'Processing ' + res.processed + ' / ' + res.total + ' — ' + (res.message || '');
+
+          if (res.errors && res.errors.length) {
+            document.getElementById('errorList').innerHTML += res.errors.join('<br>') + '<br>';
+          }
+
+          if (!res.done) {
+            processBatch(res.processed);
+          } else {
+            document.getElementById('progressText').innerHTML += ' ✅ Complete!';
+            setTimeout(function() { google.script.host.close(); }, 2000);
+          }
+        })
+        .withFailureHandler(function(err) {
+          document.getElementById('progressText').innerHTML =
+            '<span style="color:red;">❌ ' + err.message + '</span>';
+          document.getElementById('importBtn').disabled = false;
+        })
+        .processImportBatch(offset, batchSize);
+    }
+  </script>
+</body>
+</html>
