@@ -1,1 +1,697 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Library System · Add New Book</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* CSS variables – professional palette */
+    :root {
+      --bg-light: #f1f5f9;
+      --bg-dark: #0f172a;
+      --card-light: #ffffff;
+      --card-dark: #1e293b;
+      --text-light: #0f172a;
+      --text-dark: #e2e8f0;
+      --label-light: #334155;
+      --label-dark: #cbd5e1;
+      --input-bg-light: #ffffff;
+      --input-bg-dark: #0f172a;
+      --input-border-light: #cbd5e1;
+      --input-border-dark: #475569;
+      --input-focus-light: #3b82f6;
+      --input-focus-dark: #60a5fa;
+      --placeholder-light: #94a3b8;
+      --placeholder-dark: #64748b;
+      --accent: #2c6e9e;
+      --accent-dark: #3b82f6;
+      --btn-hover: #1e4a76;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    body {
+      background: var(--bg-light);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      transition: background 0.2s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+    }
+
+    /* Main card */
+    .form-card {
+      max-width: 680px;
+      width: 100%;
+      background: var(--card-light);
+      border-radius: 28px;
+      box-shadow: var(--shadow-md), 0 10px 25px -5px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    body.dark .form-card {
+      background: var(--card-dark);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+    }
+
+    /* Header – clean, professional */
+    .card-header {
+      padding: 28px 32px 16px 32px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    body.dark .card-header {
+      border-bottom-color: #334155;
+    }
+
+    .title-section h1 {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+    body.dark .title-section h1 {
+      color: var(--text-dark);
+    }
+    .title-section .badge {
+      font-size: 13px;
+      color: #475569;
+      background: #f1f5f9;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+    body.dark .title-section .badge {
+      background: #334155;
+      color: #cbd5e1;
+    }
+
+    /* Theme toggle – subtle */
+    .theme-toggle {
+      background: none;
+      border: 1px solid #cbd5e1;
+      font-size: 1.25rem;
+      cursor: pointer;
+      border-radius: 40px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: #334155;
+    }
+    body.dark .theme-toggle {
+      border-color: #475569;
+      color: #f1f5f9;
+    }
+    .theme-toggle:hover {
+      background: #e2e8f0;
+      transform: scale(0.96);
+    }
+    body.dark .theme-toggle:hover {
+      background: #334155;
+    }
+
+    /* Form body */
+    .form-body {
+      padding: 28px 32px 36px;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--label-light);
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+    body.dark label {
+      color: var(--label-dark);
+    }
+
+    /* Inputs – clearly distinct from labels, strong borders */
+    input, .search-box input, .language-search-container input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 15px;
+      border: 1.5px solid var(--input-border-light);
+      border-radius: 16px;
+      background-color: var(--input-bg-light);
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-light);
+    }
+    body.dark input,
+    body.dark .search-box input,
+    body.dark .language-search-container input {
+      background-color: var(--input-bg-dark);
+      border-color: var(--input-border-dark);
+      color: var(--text-dark);
+    }
+
+    input::placeholder {
+      color: var(--placeholder-light);
+    }
+    body.dark input::placeholder {
+      color: var(--placeholder-dark);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--input-focus-light);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+    body.dark input:focus {
+      border-color: var(--input-focus-dark);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
+    }
+
+    /* Two column layout */
+    .row-2cols {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .row-2cols .input-group {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    /* Suggestions panels – consistent with card style */
+    .search-box, .language-search-container {
+      position: relative;
+    }
+    .suggestions-dropdown, #suggestions {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      width: 100%;
+      background: var(--card-light);
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+      max-height: 260px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      border: 1px solid var(--input-border-light);
+    }
+    body.dark .suggestions-dropdown,
+    body.dark #suggestions {
+      background: var(--card-dark);
+      border-color: var(--input-border-dark);
+    }
+    .suggestion-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.1s;
+      border-bottom: 1px solid #eef2f6;
+    }
+    body.dark .suggestion-item {
+      border-bottom-color: #2d3a4e;
+    }
+    .suggestion-item:hover {
+      background: #f8fafc;
+    }
+    body.dark .suggestion-item:hover {
+      background: #2d3a4e;
+    }
+    .book-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    body.dark .book-name {
+      color: var(--text-dark);
+    }
+    .book-no {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    body.dark .book-no {
+      color: #94a3b8;
+    }
+    .lang-suggestion {
+      font-weight: 500;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+    }
+    body.dark .lang-suggestion {
+      color: var(--text-dark);
+    }
+    .lang-suggestion:before {
+      content: "🌐";
+      font-size: 13px;
+    }
+
+    /* Save button – strong, professional */
+    .save-btn {
+      width: 100%;
+      background: var(--accent);
+      border: none;
+      padding: 14px 20px;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .save-btn:hover {
+      background: var(--btn-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .save-btn:active {
+      transform: translateY(1px);
+    }
+    .save-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    body.dark .save-btn {
+      background: var(--accent-dark);
+    }
+    body.dark .save-btn:hover {
+      background: #2563eb;
+    }
+
+    /* Toast messages */
+    .msg-toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 260px;
+      max-width: 440px;
+      padding: 12px 24px;
+      border-radius: 48px;
+      font-weight: 500;
+      font-size: 14px;
+      text-align: center;
+      z-index: 10000;
+      display: none;
+      box-shadow: var(--shadow-md);
+      animation: slideIn 0.2s ease;
+      backdrop-filter: blur(4px);
+    }
+    .msg-toast.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+    body.dark .msg-toast.success {
+      background: #064e3b;
+      color: #a7f3d0;
+      border-left-color: #34d399;
+    }
+    .msg-toast.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+    body.dark .msg-toast.error {
+      background: #7f1d1d;
+      color: #fecaca;
+      border-left-color: #f87171;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 16px; }
+      .form-body { padding: 24px 20px; }
+      .card-header { padding: 20px 24px 12px 24px; }
+      .title-section h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-card">
+  <div class="card-header">
+    <div class="title-section">
+      <h1>Add New Book</h1>
+      <span class="badge">Library Inventory</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Dark/Light mode">🌙</button>
+  </div>
+
+  <div class="form-body">
+    <!-- Book Name with search -->
+    <div class="input-group">
+      <label>Book Title</label>
+      <div class="search-box">
+        <input type="text" id="bookName" autocomplete="off" placeholder="Title or ISBN search..." oninput="searchBooks()">
+        <div id="suggestions"></div>
+      </div>
+    </div>
+
+    <!-- Two columns: Language + Publication -->
+    <div class="row-2cols">
+      <div class="input-group">
+        <label>Language</label>
+        <div class="language-search-container" id="languageSearchContainer">
+          <input type="text" id="language" autocomplete="off" placeholder="Select or type language" oninput="searchLanguages()">
+          <div id="languageSuggestions" class="suggestions-dropdown"></div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Publication</label>
+        <input type="text" id="publication" placeholder="Publisher name">
+      </div>
+    </div>
+
+    <!-- Author full width -->
+    <div class="input-group">
+      <label>Author(s)</label>
+      <input type="text" id="author" placeholder="Full name of author">
+    </div>
+
+    <!-- Quantity + Price -->
+    <div class="row-2cols">
+      <div class="input-group">
+        <label>Available Quantity</label>
+        <input type="number" id="qty" min="0" step="1" placeholder="0" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      </div>
+      <div class="input-group">
+        <label>Price (₹)</label>
+        <input type="number" id="price" min="0" step="0.01" placeholder="0.00" oninput="this.value=this.value.replace(/[^0-9.]/g,'')">
+      </div>
+    </div>
+
+    <button class="save-btn" onclick="save()">
+      💾 Save to Library
+    </button>
+  </div>
+</div>
+
+<div id="msgToast" class="msg-toast"></div>
+
+<script>
+  // ---------- GLOBALS ----------
+  let allBooks = [];
+  let booksLoaded = false;
+
+  // ---------- THEME MANAGER (light/dark with localStorage) ----------
+  const themeToggle = document.getElementById('themeToggle');
+  function setTheme(theme) {
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      localStorage.setItem('libraryTheme', 'dark');
+      themeToggle.innerHTML = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      localStorage.setItem('libraryTheme', 'light');
+      themeToggle.innerHTML = '🌙';
+    }
+  }
+  function toggleTheme() {
+    const isDark = document.body.classList.contains('dark');
+    setTheme(isDark ? 'light' : 'dark');
+  }
+  const savedTheme = localStorage.getItem('libraryTheme');
+  if (savedTheme === 'dark') setTheme('dark');
+  else setTheme('light');
+  themeToggle.addEventListener('click', toggleTheme);
+
+  // ---------- LANGUAGE MASTER LIST (Indian + International) ----------
+  const LANGUAGE_LIST = [
+    "Hindi", "English", "Bengali", "Telugu", "Marathi", "Tamil", "Urdu", "Gujarati", "Kannada",
+    "Malayalam", "Odia", "Punjabi", "Assamese", "Maithili", "Santali", "Kashmiri", "Nepali",
+    "Sindhi", "Konkani", "Manipuri (Meitei)", "Bodo", "Dogri", "Sanskrit", "Tulu", "Kokborok",
+    "Mizo", "Khasi", "Garo", "Ladakhi", "Bhojpuri", "Rajasthani", "Magahi", "Haryanvi",
+    "Chhattisgarhi", "Nagamese", "Sikkimese", "Kurukh", "Mundari", "Karbi", "Gondi",
+    "Spanish", "French", "German", "Italian", "Portuguese", "Russian", "Japanese",
+    "Chinese (Mandarin)", "Cantonese", "Arabic", "Dutch", "Greek", "Turkish", "Korean",
+    "Vietnamese", "Thai", "Polish", "Swedish", "Danish", "Finnish", "Norwegian", "Hebrew",
+    "Malay", "Indonesian", "Swahili", "Tagalog", "Romanian", "Czech", "Hungarian",
+    "Ukrainian", "Persian (Farsi)", "Pashto", "Burmese", "Khmer", "Lao", "Sinhala", "Amharic",
+    "Latin", "Welsh", "Irish", "Icelandic", "Basque", "Catalan", "Serbian", "Croatian", "Bosnian",
+    "Albanian", "Georgian", "Armenian", "Mongolian", "Uzbek", "Kazakh", "Azerbaijani", "Belarusian"
+  ].sort((a,b) => a.localeCompare(b));
+
+  // ---------- LOAD BOOKS FROM BACKEND (Google Apps Script) ----------
+  function loadBooks(forceRefresh) {
+    if (booksLoaded && !forceRefresh) return;
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(data) {
+          allBooks = Array.isArray(data) ? data : [];
+          booksLoaded = true;
+          console.log("Library books loaded:", allBooks.length);
+        })
+        .withFailureHandler(function(err) {
+          console.error("Failed to load books:", err);
+          allBooks = [];
+          booksLoaded = false;
+        })
+        .getBooks();
+    } else {
+      // demo / fallback (no backend)
+      console.warn("Google Apps Script not detected – demo mode (data not persisted)");
+      allBooks = [];
+      booksLoaded = true;
+    }
+  }
+  loadBooks(false);
+
+  // ---------- SAVE BOOK (production-ready) ----------
+  function save() {
+    const bookName = document.getElementById("bookName").value.trim();
+    const language = document.getElementById("language").value.trim();
+    const publication = document.getElementById("publication").value.trim();
+    const author = document.getElementById("author").value.trim();
+    let qty = document.getElementById("qty").value;
+    let price = document.getElementById("price").value;
+
+    if (bookName === "") { showMsg("Book title is required", "error"); return; }
+    if (qty === "") { showMsg("Quantity must be specified", "error"); return; }
+    if (price === "") { showMsg("Price is required", "error"); return; }
+
+    const data = { bookName, language, publication, author, qty, price };
+    const btn = document.querySelector(".save-btn");
+    btn.disabled = true;
+    btn.innerHTML = "⏳ Saving record...";
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(msg) {
+          showMsg("✓ " + msg, "success");
+          resetFormFields();
+          btn.disabled = false;
+          btn.innerHTML = "💾 Save to Library";
+        })
+        .withFailureHandler(function(err) {
+          showMsg("✗ " + (err.message || "Save failed"), "error");
+          btn.disabled = false;
+          btn.innerHTML = "💾 Save to Library";
+        })
+        .saveBook(data);
+    } else {
+      // fallback for local testing
+      setTimeout(() => {
+        showMsg(`✓ [Demo] "${bookName}" added to library`, "success");
+        resetFormFields();
+        btn.disabled = false;
+        btn.innerHTML = "💾 Save to Library";
+      }, 400);
+    }
+  }
+
+  function resetFormFields() {
+    document.getElementById("bookName").value = "";
+    document.getElementById("language").value = "";
+    document.getElementById("publication").value = "";
+    document.getElementById("author").value = "";
+    document.getElementById("qty").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("suggestions").style.display = "none";
+    document.getElementById("languageSuggestions").style.display = "none";
+    loadBooks(true);
+  }
+
+  function showMsg(text, type) {
+    const toast = document.getElementById("msgToast");
+    toast.textContent = text;
+    toast.className = "msg-toast " + (type === "error" ? "error" : "success");
+    toast.style.display = "block";
+    clearTimeout(window.toastTimer);
+    window.toastTimer = setTimeout(() => {
+      toast.style.display = "none";
+    }, 3200);
+  }
+
+  // ---------- BOOK SEARCH (auto-fill from existing records) ----------
+  function searchBooks() {
+    const input = document.getElementById("bookName");
+    const kw = input.value.toLowerCase().trim();
+    const suggDiv = document.getElementById("suggestions");
+    if (kw === "") {
+      suggDiv.innerHTML = "";
+      suggDiv.style.display = "none";
+      return;
+    }
+    let filtered = allBooks.filter(book => book.name && book.name.toLowerCase().includes(kw));
+    if (filtered.length === 0) {
+      suggDiv.innerHTML = "";
+      suggDiv.style.display = "none";
+      return;
+    }
+    suggDiv.innerHTML = "";
+    filtered.slice(0, 8).forEach(book => {
+      const div = document.createElement("div");
+      div.className = "suggestion-item";
+      div.innerHTML = `<div class="book-name">${escapeHtml(book.name)}</div>
+                       <div class="book-no">${book.no ? 'ID: ' + escapeHtml(book.no) : 'existing record'}</div>`;
+      div.onclick = () => selectBook(book);
+      suggDiv.appendChild(div);
+    });
+    suggDiv.style.display = "block";
+  }
+
+  function selectBook(book) {
+    document.getElementById("bookName").value = book.name || "";
+    if (book.language) document.getElementById("language").value = book.language;
+    if (book.publication) document.getElementById("publication").value = book.publication;
+    if (book.author) document.getElementById("author").value = book.author;
+    document.getElementById("suggestions").style.display = "none";
+  }
+
+  // ---------- LANGUAGE AUTOCOMPLETE ----------
+  function searchLanguages() {
+    const input = document.getElementById("language");
+    const keyword = input.value.toLowerCase().trim();
+    const suggDiv = document.getElementById("languageSuggestions");
+    if (keyword === "") {
+      suggDiv.innerHTML = "";
+      suggDiv.style.display = "none";
+      return;
+    }
+    let matched = LANGUAGE_LIST.filter(lang => lang.toLowerCase().includes(keyword));
+    if (matched.length === 0) {
+      suggDiv.innerHTML = "";
+      suggDiv.style.display = "none";
+      return;
+    }
+    suggDiv.innerHTML = "";
+    matched.slice(0, 12).forEach(lang => {
+      const div = document.createElement("div");
+      div.className = "suggestion-item";
+      const highlighted = highlightText(lang, keyword);
+      div.innerHTML = `<div class="lang-suggestion">${highlighted}</div>`;
+      div.onclick = (function(l) { return function() { selectLanguage(l); }; })(lang);
+      suggDiv.appendChild(div);
+    });
+    suggDiv.style.display = "block";
+  }
+
+  function highlightText(fullText, query) {
+    if (!query) return escapeHtml(fullText);
+    const escapedFull = escapeHtml(fullText);
+    const escapedQuery = escapeHtml(query);
+    const regex = new RegExp(`(${escapedQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return escapedFull.replace(regex, `<strong style="color: #3b82f6;">$1</strong>`);
+  }
+
+  function selectLanguage(lang) {
+    document.getElementById("language").value = lang;
+    document.getElementById("languageSuggestions").style.display = "none";
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ---------- UI Helpers: click outside & focus ----------
+  document.addEventListener("click", function(e) {
+    const bookBox = document.querySelector("#bookName")?.closest(".search-box");
+    if (bookBox && !bookBox.contains(e.target)) {
+      document.getElementById("suggestions").style.display = "none";
+    }
+    const langBox = document.getElementById("languageSearchContainer");
+    if (langBox && !langBox.contains(e.target)) {
+      document.getElementById("languageSuggestions").style.display = "none";
+    }
+  });
+
+  document.getElementById("language").addEventListener("focus", function() {
+    if (this.value.trim() !== "") searchLanguages();
+  });
+  document.getElementById("bookName").addEventListener("focus", function() {
+    if (this.value.trim() !== "") searchBooks();
+  });
+
+  // input sanitation for numbers
+  const priceEl = document.getElementById("price");
+  if (priceEl) {
+    priceEl.addEventListener("blur", function() {
+      let v = parseFloat(this.value);
+      if (isNaN(v)) this.value = "";
+      else if (v < 0) this.value = 0;
+      else this.value = v.toFixed(2);
+    });
+  }
+  const qtyEl = document.getElementById("qty");
+  if (qtyEl) {
+    qtyEl.addEventListener("blur", function() {
+      let v = parseInt(this.value, 10);
+      if (isNaN(v)) this.value = 0;
+      else if (v < 0) this.value = 0;
+      else this.value = v;
+    });
+  }
+
+  // Expose functions for inline handlers
+  window.save = save;
+  window.searchBooks = searchBooks;
+  window.searchLanguages = searchLanguages;
+</script>
+</body>
+</html>
