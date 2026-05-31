@@ -1,1 +1,777 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>DYD Library ERP · Light/Dark</title>
+
+    <style>
+        /* ============ GLOBAL VARIABLES (DARK THEME DEFAULT) ============ */
+        :root {
+            --bg-deep: #0a0e17;
+            --bg-surface: #111827;
+            --bg-card: #161e2c;
+            --bg-elevated: #1c2739;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-mid: rgba(255, 255, 255, 0.10);
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #8896a9;
+            --accent-amber: #f59e0b;
+            --accent-amber-glow: rgba(245, 158, 11, 0.35);
+            --accent-gold: #eab308;
+            --accent-teal: #14b8a6;
+            --accent-rose: #f43f5e;
+            --accent-indigo: #6366f1;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+            --shadow-glow-amber: 0 0 40px rgba(245, 158, 11, 0.18);
+            --body-bg-image: radial-gradient(ellipse at 15% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 55%),
+                              radial-gradient(ellipse at 85% 75%, rgba(99, 102, 241, 0.05) 0%, transparent 55%),
+                              radial-gradient(ellipse at 50% 50%, rgba(20, 184, 166, 0.03) 0%, transparent 60%),
+                              repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.004) 2px, rgba(255, 255, 255, 0.004) 4px);
+            --toast-success-bg: linear-gradient(135deg, #065f46, #059669);
+            --toast-error-bg: linear-gradient(135deg, #7f1d1d, #b91c1c);
+            --toast-warning-bg: linear-gradient(135deg, #78350f, #b45309);
+            --btn-gradient: linear-gradient(135deg, #b45309, #d97706, #eab308);
+            --btn-hover-shadow: 0 14px 36px rgba(245, 158, 11, 0.4);
+            --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238896a9' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            --radius-xl: 30px;
+            --radius-md: 18px;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============ LIGHT THEME OVERRIDES ============ */
+        body.light-theme {
+            --bg-deep: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-card: #f9fafb;
+            --bg-elevated: #ffffff;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-mid: rgba(0, 0, 0, 0.10);
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.1);
+            --shadow-glow-amber: 0 0 20px rgba(245, 158, 11, 0.12);
+            --body-bg-image: radial-gradient(ellipse at 15% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 55%),
+                              radial-gradient(ellipse at 85% 75%, rgba(99, 102, 241, 0.03) 0%, transparent 55%),
+                              repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.01) 2px, rgba(0, 0, 0, 0.01) 4px);
+            --toast-success-bg: linear-gradient(135deg, #10b981, #059669);
+            --toast-error-bg: linear-gradient(135deg, #ef4444, #dc2626);
+            --toast-warning-bg: linear-gradient(135deg, #f59e0b, #d97706);
+            --btn-gradient: linear-gradient(135deg, #b45309, #d97706, #eab308);
+            --btn-hover-shadow: 0 14px 28px rgba(245, 158, 11, 0.25);
+            --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-deep);
+            background-image: var(--body-bg-image);
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.25s ease, color 0.2s ease;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.25);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.45);
+        }
+
+        .app {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* ============ HEADER – REFINED ============ */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 18px 28px;
+            box-shadow: var(--shadow-md), var(--shadow-glow-amber);
+            position: relative;
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.13) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 1;
+        }
+        .logo-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            background: linear-gradient(145deg, #1c2739, #111827);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: all var(--transition-smooth);
+        }
+        body.light-theme .logo-icon {
+            background: linear-gradient(145deg, #fef9e3, #fff7ed);
+            border-color: rgba(245, 158, 11, 0.6);
+        }
+        .brand-text h1 {
+            font-family: 'Playfair Display', 'Inter', serif;
+            font-size: 1.65rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .brand-text h1 span {
+            color: var(--accent-amber);
+        }
+        .brand-text .subtitle {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-top: 2px;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            z-index: 1;
+        }
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-mid);
+            border-radius: 60px;
+            width: 46px;
+            height: 46px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+        .theme-toggle:hover {
+            background: rgba(245, 158, 11, 0.2);
+            transform: scale(0.96);
+        }
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            color: #5eead4;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(2px);
+        }
+        body.light-theme .live-badge {
+            background: rgba(20, 184, 166, 0.08);
+            color: #0f766e;
+            border-color: rgba(20, 184, 166, 0.4);
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #14b8a6;
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+        @keyframes dotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.65); }
+        }
+
+        /* ============ SEARCH BAR ============ */
+        .search-bar-wrap {
+            position: relative;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 30px;
+            padding: 16px 20px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+        }
+        .search-bar-wrap:focus-within {
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: var(--shadow-md), 0 0 0 6px rgba(245, 158, 11, 0.06);
+        }
+        .search-inner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .search-icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            background: rgba(245, 158, 11, 0.07);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            flex-shrink: 0;
+        }
+        #search {
+            flex: 1;
+            border: none;
+            background: transparent;
+            height: 50px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        #search::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        #search:focus {
+            outline: none;
+        }
+        #suggestions {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            top: 88px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-mid);
+            border-radius: 24px;
+            overflow: hidden;
+            display: none;
+            z-index: 999;
+            box-shadow: var(--shadow-lg);
+            max-height: 380px;
+            overflow-y: auto;
+        }
+        .suggestion-item {
+            padding: 16px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.18s;
+        }
+        body.light-theme .suggestion-item {
+            border-bottom-color: rgba(0, 0, 0, 0.04);
+        }
+        .suggestion-item:hover {
+            background: rgba(245, 158, 11, 0.08);
+        }
+        .suggestion-item .book-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .suggestion-item .book-no {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ============ MAIN GRID & CARDS ============ */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 0.65fr;
+            gap: 18px;
+        }
+        @media (max-width: 980px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .brand-text h1 { font-size: 1.35rem; }
+        }
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 30px;
+            padding: 26px 28px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.25), rgba(99, 102, 241, 0.2), transparent);
+            pointer-events: none;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        .card-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 18px;
+            background: rgba(245, 158, 11, 0.07);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .card-title h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .card-title .card-subtitle {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* FORMS */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .field-group label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .field-group input,
+        .field-group select {
+            width: 100%;
+            height: 50px;
+            border-radius: 16px;
+            border: 1px solid var(--border-mid);
+            background: rgba(255, 255, 255, 0.025);
+            padding: 0 16px;
+            font-size: 0.88rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        body.light-theme .field-group input,
+        body.light-theme .field-group select {
+            background: #ffffff;
+            border-color: #e2e8f0;
+        }
+        .field-group input:focus,
+        .field-group select:focus {
+            outline: none;
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.07);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .field-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: var(--select-arrow);
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        /* STOCK DISPLAY */
+        .stock-display {
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 20px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        body.light-theme .stock-display {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+        .stock-badge {
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            color: #fcd34d;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        body.light-theme .stock-badge {
+            background: #fef3c7;
+            color: #b45309;
+            border-color: #fcd34d;
+        }
+        .stock-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+        .stock-status-text {
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 999px;
+        }
+        .status-healthy { background: rgba(20, 184, 166, 0.1); border: 1px solid rgba(20, 184, 166, 0.25); color: #5eead4; }
+        .status-medium { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); color: #fcd34d; }
+        .status-low { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.25); color: #fda4af; }
+        .status-out { background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); color: #fecaca; animation: urgentPulse 1.2s infinite; }
+        body.light-theme .status-healthy { background: #d1fae5; color: #065f46; border-color: #34d399; }
+        body.light-theme .status-medium { background: #fef3c7; color: #92400e; border-color: #fbbf24; }
+        body.light-theme .status-low { background: #ffe4e6; color: #9f1239; border-color: #f43f5e; }
+        body.light-theme .status-out { background: #fee2e2; color: #991b1b; border-color: #f87171; }
+
+        .stock-controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* BUTTON */
+        .btn-save {
+            width: 100%;
+            height: 54px;
+            border: none;
+            border-radius: 20px;
+            background: var(--btn-gradient);
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 8px 28px rgba(245, 158, 11, 0.3);
+            margin-top: 20px;
+        }
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--btn-hover-shadow);
+        }
+        .btn-save:active { transform: translateY(0); }
+        .btn-save:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .spinner-mini {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            min-width: 300px;
+            max-width: 440px;
+            padding: 16px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-lg);
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show { opacity: 1; transform: translateX(0); }
+        .toast-success { background: var(--toast-success-bg); }
+        .toast-error { background: var(--toast-error-bg); }
+        .toast-warning { background: var(--toast-warning-bg); }
+
+        @keyframes urgentPulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(244, 63, 94, 0); }
+            50% { box-shadow: 0 0 18px rgba(244, 63, 94, 0.35); }
+        }
+        @media (max-width: 500px) {
+            .form-row, .stock-controls-row { grid-template-columns: 1fr !important; }
+            .card { padding: 18px 16px !important; }
+            .header { padding: 16px 20px; }
+            .logo-icon { width: 44px; height: 44px; font-size: 24px; }
+            .brand-text h1 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header class="header">
+        <div class="brand-group">
+            <div class="logo-icon">📚</div>
+            <div class="brand-text">
+                <h1>DYD <span>Library</span> ERP</h1>
+                <p class="subtitle">Professional Inventory Management</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">🌙</button>
+            <div class="live-badge"><span class="live-dot"></span> LIVE INVENTORY</div>
+        </div>
+    </header>
+
+    <div class="search-bar-wrap" id="searchWrap">
+        <div class="search-inner">
+            <div class="search-icon-circle">🔍</div>
+            <input type="text" id="search" placeholder="Search by book name or book number..." autocomplete="off" oninput="searchBooks()">
+        </div>
+        <div id="suggestions"></div>
+    </div>
+
+    <div class="main-grid">
+        <div class="card" id="detailsCard">
+            <div class="card-header">
+                <div class="card-icon">📖</div>
+                <div class="card-title">
+                    <h3>Book Details</h3>
+                    <p class="card-subtitle">Update publication &amp; pricing</p>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field-group"><label>Book Name</label><input type="text" id="name" placeholder="Enter book name"></div>
+                <div class="field-group"><label>Language</label><input type="text" id="language" placeholder="Enter language"></div>
+                <div class="field-group"><label>Publication</label><input type="text" id="publication" placeholder="Enter publication"></div>
+                <div class="field-group"><label>Author</label><input type="text" id="author" placeholder="Enter author"></div>
+                <div class="field-group"><label>Price ₹</label><input type="number" id="price" placeholder="Enter price" min="0"></div>
+            </div>
+        </div>
+
+        <div class="card" id="inventoryCard">
+            <div class="card-header">
+                <div class="card-icon">📦</div>
+                <div class="card-title">
+                    <h3>Inventory Control</h3>
+                    <p class="card-subtitle">Manage stock movement</p>
+                </div>
+            </div>
+            <div class="stock-display">
+                <div class="stock-display-left"><span class="stock-badge">📋 LIVE STOCK</span><span class="stock-number" id="currentStock">--</span></div>
+                <span class="stock-status-text" id="stockStatus">Select a book</span>
+            </div>
+            <div class="stock-controls-row">
+                <div class="field-group"><label>Stock Action</label><select id="stockAction"><option value="add">➕ Add Stock</option><option value="remove">➖ Remove Stock</option></select></div>
+                <div class="field-group"><label>Quantity</label><input type="number" id="stockQty" min="0" placeholder="Enter quantity"></div>
+            </div>
+            <button class="btn-save" id="saveBtn" onclick="saveChanges()"><span class="btn-content" id="btnContent">💾 Save Changes</span></button>
+        </div>
+    </div>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    let books = [];
+    let selectedBook = null;
+    let saving = false;
+
+    // ========== THEME MANAGEMENT ==========
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(theme) {
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
+            localStorage.setItem('dyd_library_theme', 'light');
+            themeToggle.innerHTML = '🌙';
+        } else {
+            document.body.classList.remove('light-theme');
+            localStorage.setItem('dyd_library_theme', 'dark');
+            themeToggle.innerHTML = '☀️';
+        }
+    }
+    function toggleTheme() {
+        const isLight = document.body.classList.contains('light-theme');
+        setTheme(isLight ? 'dark' : 'light');
+    }
+    const savedTheme = localStorage.getItem('dyd_library_theme');
+    if (savedTheme === 'light') setTheme('light');
+    else setTheme('dark');
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // ========== GOOGLE SCRIPT INTERACTION ==========
+    google.script.run
+        .withSuccessHandler(function(data) { books = data || []; showToast('success', '✅', 'Inventory loaded'); })
+        .withFailureHandler(function() { showToast('error', '❌', 'Unable to load inventory'); })
+        .getBooks();
+
+    function searchBooks() {
+        const keyword = document.getElementById('search').value.toLowerCase().trim();
+        const box = document.getElementById('suggestions');
+        if (keyword === '') { box.innerHTML = ''; box.style.display = 'none'; return; }
+        const filtered = books.filter(b => (b.name || '').toLowerCase().includes(keyword) || (b.no || '').toLowerCase().includes(keyword));
+        if (filtered.length === 0) { box.innerHTML = '<div class="suggestion-empty" style="padding:20px;text-align:center;color:var(--text-muted);">📭 No books found</div>'; box.style.display = 'block'; return; }
+        box.innerHTML = '';
+        filtered.slice(0, 15).forEach(book => {
+            const div = document.createElement('div');
+            div.className = 'suggestion-item';
+            div.innerHTML = `<div class="book-name">${escapeHtml(book.name || '')}</div><div class="book-no">#${escapeHtml(book.no || '')}</div>`;
+            div.onclick = () => { selectBook(book.no); document.getElementById('search').value = book.name || ''; box.style.display = 'none'; };
+            box.appendChild(div);
+        });
+        box.style.display = 'block';
+    }
+
+    function selectBook(bookNo) {
+        selectedBook = books.find(b => b.no === bookNo);
+        if (!selectedBook) { showToast('error', '❌', 'Book not found'); return; }
+        document.getElementById('name').value = selectedBook.name || '';
+        document.getElementById('language').value = selectedBook.language || '';
+        document.getElementById('publication').value = selectedBook.publication || '';
+        document.getElementById('author').value = selectedBook.author || '';
+        document.getElementById('price').value = selectedBook.price || '';
+        const qty = Number(selectedBook.qty) || 0;
+        document.getElementById('currentStock').innerText = qty;
+        updateStockStatus(qty);
+        document.getElementById('stockQty').value = '';
+        showToast('success', '📖', `Selected: ${selectedBook.name || bookNo}`);
+    }
+
+    function saveChanges() {
+        if (saving) return;
+        if (!selectedBook) { showToast('warning', '⚠️', 'Please select a book first'); return; }
+        const name = document.getElementById('name').value.trim();
+        if (name === '') { showToast('warning', '⚠️', 'Book name is required'); return; }
+        const price = Number(document.getElementById('price').value);
+        if (isNaN(price) || price <= 0) { showToast('warning', '⚠️', 'Enter a valid price'); return; }
+        const qty = Number(document.getElementById('stockQty').value) || 0;
+        if (qty < 0) { showToast('warning', '⚠️', 'Quantity cannot be negative'); return; }
+        const action = document.getElementById('stockAction').value;
+        const currentQty = Number(selectedBook.qty) || 0;
+        if (action === 'remove' && qty > currentQty) { showToast('error', '🚫', 'Insufficient stock available'); return; }
+
+        saving = true;
+        const btn = document.getElementById('saveBtn');
+        const btnContent = document.getElementById('btnContent');
+        btn.disabled = true;
+        btnContent.innerHTML = '<span class="spinner-mini"></span> Saving...';
+
+        const data = {
+            bookNo: selectedBook.no,
+            name: name,
+            language: document.getElementById('language').value.trim(),
+            publication: document.getElementById('publication').value.trim(),
+            author: document.getElementById('author').value.trim(),
+            price: price,
+            stockAction: action,
+            stockQty: qty
+        };
+
+        google.script.run
+            .withSuccessHandler(function(res) {
+                saving = false; btn.disabled = false; btnContent.innerHTML = '💾 Save Changes';
+                const newQty = Number(res.newQty) || 0;
+                selectedBook.qty = newQty;
+                document.getElementById('currentStock').innerText = newQty;
+                updateStockStatus(newQty);
+                document.getElementById('stockQty').value = '';
+                showToast('success', '✅', 'Inventory updated');
+            })
+            .withFailureHandler(function(err) {
+                saving = false; btn.disabled = false; btnContent.innerHTML = '💾 Save Changes';
+                showToast('error', '❌', err.message || 'Update failed');
+            })
+            .saveBookChanges(data);
+    }
+
+    function updateStockStatus(qty) {
+        const status = document.getElementById('stockStatus');
+        status.classList.remove('status-healthy', 'status-medium', 'status-low', 'status-out');
+        if (qty <= 0) { status.innerText = '🔴 Out of Stock'; status.classList.add('status-out'); }
+        else if (qty <= 5) { status.innerText = '🟠 Low Stock'; status.classList.add('status-low'); }
+        else if (qty <= 20) { status.innerText = '🟡 Medium Stock'; status.classList.add('status-medium'); }
+        else { status.innerText = '🟢 Healthy Stock'; status.classList.add('status-healthy'); }
+    }
+
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    function showToast(type, icon, message) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `<span class="toast-icon">${icon}</span>${message}`;
+        container.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => { if(toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+        }, 3200);
+    }
+
+    document.addEventListener('click', (e) => { if (!e.target.closest('#searchWrap')) document.getElementById('suggestions').style.display = 'none'; });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { document.getElementById('suggestions').style.display = 'none'; document.getElementById('search').blur(); } if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveChanges(); } });
+</script>
+</body>
+</html>
